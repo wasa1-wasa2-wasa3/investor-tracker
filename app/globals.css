@@ -1,0 +1,63 @@
+:root {
+  --bg: #f6f5f1;
+  --card: #ffffff;
+  --ink: #1d1d1b;
+  --muted: #6b6a64;
+  --line: #e3e1d9;
+  --new: #b4441b;
+  --chg: #2f5f8a;
+  --tag: #efede6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --card: #1f1f1d;
+    --ink: #ecebe6;
+    --muted: #9b9a93;
+    --line: #34332f;
+    --new: #e07a52;
+    --chg: #7fb0dc;
+    --tag: #2a2a27;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  line-height: 1.5;
+}
+main { max-width: 880px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+select, button, label.chk {
+  font: inherit; font-size: 14px; padding: 6px 10px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+}
+label.chk { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.banner { font-size: 13px; padding: 8px 12px; border-radius: 8px; background: var(--tag); margin-bottom: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.chip {
+  font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--card); color: var(--ink); cursor: pointer;
+}
+.chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.list { display: flex; flex-direction: column; gap: 8px; }
+.item {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px;
+}
+.item.other { opacity: 0.6; }
+.top { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.badge { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; color: #fff; }
+.badge.new { background: var(--new); }
+.badge.chg { background: var(--chg); }
+.who { font-weight: 700; }
+.target { font-size: 15px; }
+.code { font-family: ui-monospace, monospace; color: var(--muted); font-size: 13px; }
+.meta { color: var(--muted); font-size: 12px; grid-column: 1 / -1; }
+.links { display: flex; gap: 10px; font-size: 13px; align-self: start; }
+a { color: var(--chg); }
+.empty { color: var(--muted); padding: 24px 0; text-align: center; }
