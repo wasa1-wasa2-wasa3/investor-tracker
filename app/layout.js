@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "大物ウォッチ",
-  description: "著名投資家の大量保有報告書をEDINETから拾うPoC",
+  title: "イナゴライダー",
+  description: "大物投資家が買った銘柄に乗る。EDINETの大量保有報告書から候補を拾う",
 };
 
 export default function RootLayout({ children }) {

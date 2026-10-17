@@ -50,8 +50,8 @@ export default function Home() {
 
   return (
     <main>
-      <h1>大物ウォッチ</h1>
-      <p className="sub">EDINETの大量保有報告書から、ウォッチ対象の投資家の新規・変更を拾います（PoC）</p>
+      <h1>イナゴライダー</h1>
+      <p className="sub">大物投資家が買った銘柄に乗る。EDINETの大量保有報告書から新規・変更を拾います</p>
 
       <div className="layout">
       <Picks />
