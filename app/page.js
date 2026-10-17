@@ -66,7 +66,7 @@ export default function Home() {
         {filings.map((f) => (
           <div key={f.docId} className={`item ${f.investorId ? "" : "other"}`}>
             <div className="top">
-              <span className={`badge ${f.docType === "新規" ? "new" : "chg"}`}>{f.docType}</span>
+              <span className={`badge ${f.docType === "新規" ? "new" : f.docType === "訂正" ? "fix" : "chg"}`}>{f.docType}</span>
               <span className="who">{f.investor || f.filerName}</span>
               <span>→</span>
               <span className="target">{f.targetName || f.targetEdinetCode || "対象不明"}</span>
