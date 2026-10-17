@@ -9,5 +9,5 @@ export async function GET(req) {
   const days = Math.min(Math.max(parseInt(searchParams.get("days") || "7", 10), 1), 365 * 5);
   const all = searchParams.get("all") === "1";
   const data = await getLargeHoldingFilings({ days, all });
-  return Response.json(data);
+  return Response.json(data, { headers: { "Cache-Control": "no-store" } });
 }

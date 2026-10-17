@@ -23,5 +23,5 @@ export async function GET(req) {
     }
   }
   const quotes = Object.fromEntries(codes.filter((c) => cache.get(c)).map((c) => [c, cache.get(c).quote]));
-  return Response.json({ error, quotes });
+  return Response.json({ error, quotes }, { headers: { "Cache-Control": "no-store" } });
 }
