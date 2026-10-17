@@ -60,8 +60,7 @@ export default function Home() {
           <option value={14}>14日</option>
           <option value={30}>30日</option>
           <option value={90}>90日</option>
-          <option value={365}>1年</option>
-          <option value={1095}>3年</option>
+          <option value={180}>半年</option>
         </select>
         <label className="chk">
           <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />

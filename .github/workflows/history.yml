@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       days:
-        description: "何日分さかのぼって取り直すか（空欄なら自動：初回3年分／以降14日分）"
+        description: "何日分さかのぼって取り直すか（空欄なら自動：初回は半年分／以降14日分）"
         required: false
         default: ""
 

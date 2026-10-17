@@ -1,8 +1,8 @@
 // EDINETの書類一覧を日付ごとに見て、ウォッチ対象の大量保有報告書を data/history.json に貯める。
 // GitHub Actions から毎日実行する（.github/workflows/history.yml）。
 //
-//   node scripts/update-history.mjs            … 履歴が空なら3年分、あれば直近14日分を取り直す
-//   node scripts/update-history.mjs --days 1095 … 指定日数ぶん取り直す（ウォッチ対象を増やしたとき用）
+//   node scripts/update-history.mjs            … 履歴が空なら半年分、あれば直近14日分を取り直す
+//   node scripts/update-history.mjs --days 180 … 指定日数ぶん取り直す（ウォッチ対象を増やしたとき用）
 //
 // 必要な環境変数: EDINET_API_KEY
 import fs from "node:fs";
@@ -11,7 +11,7 @@ const BASE = process.env.EDINET_BASE || "https://api.edinet-fsa.go.jp/api/v2";
 const KEY = process.env.EDINET_API_KEY;
 const HISTORY = new URL("../data/history.json", import.meta.url);
 const WATCHLIST = JSON.parse(fs.readFileSync(new URL("../data/watchlist.json", import.meta.url), "utf8"));
-const FULL_DAYS = 365 * 3;
+const FULL_DAYS = 180;
 const RECENT_DAYS = 14;
 const DELAY_MS = Number(process.env.DELAY_MS ?? 400); // EDINETに負担をかけないための間隔
 
