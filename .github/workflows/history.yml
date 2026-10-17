@@ -1,0 +1,50 @@
+name: 履歴の更新
+
+on:
+  schedule:
+    # 平日 19:37（日本時間）。報告書は日中〜夕方に出るので、その後に取りに行く
+    - cron: "37 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "何日分さかのぼって取り直すか（空欄なら自動：初回3年分／以降14日分）"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: history
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: EDINETから履歴を取得
+        env:
+          EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
+          DAYS: ${{ github.event.inputs.days }}
+        run: |
+          if [ -n "$DAYS" ]; then
+            node scripts/update-history.mjs --days "$DAYS"
+          else
+            node scripts/update-history.mjs
+          fi
+      - name: 変更があればコミット
+        run: |
+          if git diff --quiet data/history.json; then
+            echo "変更なし"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/history.json
+          git commit -m "履歴を更新 $(date -u +%Y-%m-%d)"
+          git push

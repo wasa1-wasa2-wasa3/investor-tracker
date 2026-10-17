@@ -58,6 +58,10 @@ export default function Home() {
           <option value={3}>3日</option>
           <option value={7}>7日</option>
           <option value={14}>14日</option>
+          <option value={30}>30日</option>
+          <option value={90}>90日</option>
+          <option value={365}>1年</option>
+          <option value={1095}>3年</option>
         </select>
         <label className="chk">
           <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
@@ -67,6 +71,13 @@ export default function Home() {
       </div>
 
       {data?.mock && <div className="banner">モックデータを表示中です。EDINET_API_KEY を設定すると実データに切り替わります。</div>}
+      {data?.usedHistory && (
+        <div className="banner">
+          {data.history.count === 0
+            ? "過去の履歴データがまだありません。GitHubの「履歴の更新」を一度実行すると表示されます。"
+            : `15日以上前は保存済みの履歴から表示しています（最終更新 ${new Date(data.history.updatedAt).toLocaleString("ja-JP")}、${data.history.oldest} 以降）。この期間ではウォッチ対象外は表示されません。`}
+        </div>
+      )}
       {data?.errors?.length > 0 && <div className="banner">一部の日付で取得エラー: {data.errors.join(" / ")}</div>}
 
       <div className="tabs">

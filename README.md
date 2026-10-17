@@ -24,11 +24,23 @@ APIキーが無い状態では**モックデータ**（架空銘柄）で表示�
    - `data/codes.json` が上場企業ぶんで上書きされる（今入っているのは架空のサンプル）
 4. Vercelに置くときは、環境変数 `EDINET_API_KEY` を設定する
 
+## 過去の履歴（30日〜3年）
+
+EDINETは1日分ずつしか取れないので、GitHub Actions が平日19時半ごろに自動で取りに行き、
+ウォッチ対象の報告書だけを `data/history.json` に貯める（`.github/workflows/history.yml`）。
+コミットされるとVercelが自動で再デプロイする。
+
+- 準備：GitHubのリポジトリの Settings → Secrets and variables → Actions に `EDINET_API_KEY` を登録
+- 初回：Actions タブの「履歴の更新」→「Run workflow」。空欄のまま実行すると3年分を取得（30分前後）
+- ウォッチ対象を増やしたら：同じ画面で日数に `1095` を入れて実行すると、過去分も取り直す
+
 ## ファイル
 
 | ファイル | 役割 |
 |---|---|
-| `lib/watchlist.js` | ウォッチ対象と、提出者名に含まれる文字列。**ここを育てる** |
+| `data/watchlist.json` | ウォッチ対象・分類・提出者名に含まれる文字列。**ここを育てる** |
+| `data/history.json` | 自動で貯まる過去の報告書（手で編集しない） |
+| `scripts/update-history.mjs` | 履歴を集めるスクリプト |
 | `lib/edinet.js` | 書類一覧APIの取得と照合 |
 | `app/api/filings` | `GET /api/filings?days=7&all=1` |
 | `app/api/pdf/[docId]` | PDFをサーバー経由で返す（キーを隠すため） |

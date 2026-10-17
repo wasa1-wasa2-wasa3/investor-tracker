@@ -1,0 +1,110 @@
+[
+  {
+    "id": "satsuki",
+    "horizon": "long",
+    "label": "五月（片山晃）",
+    "style": "個人・成長株",
+    "patterns": [
+      "片山晃"
+    ]
+  },
+  {
+    "id": "imura",
+    "horizon": "long",
+    "label": "井村俊哉",
+    "style": "個人・集中投資",
+    "patterns": [
+      "井村俊哉"
+    ]
+  },
+  {
+    "id": "hikari",
+    "horizon": "broad",
+    "label": "光通信グループ",
+    "style": "中小型の大量保有",
+    "patterns": [
+      "光通信",
+      "UH Partners",
+      "ＵＨ　Ｐａｒｔｎｅｒｓ",
+      "エスアイエル",
+      "インフォサービス"
+    ]
+  },
+  {
+    "id": "murakami",
+    "horizon": "activist",
+    "label": "村上世彰系",
+    "style": "アクティビスト",
+    "patterns": [
+      "シティインデックスイレブンス",
+      "エスグラントコーポレーション",
+      "南青山不動産",
+      "村上世彰",
+      "野村絢",
+      "村上貴輝",
+      "ATRA"
+    ]
+  },
+  {
+    "id": "strategic",
+    "horizon": "activist",
+    "label": "ストラテジックキャピタル",
+    "style": "アクティビスト",
+    "patterns": [
+      "ストラテジックキャピタル"
+    ]
+  },
+  {
+    "id": "effissimo",
+    "horizon": "activist",
+    "label": "エフィッシモ",
+    "style": "アクティビスト",
+    "patterns": [
+      "エフィッシモ",
+      "Effissimo"
+    ]
+  },
+  {
+    "id": "dalton",
+    "horizon": "activist",
+    "label": "ダルトン",
+    "style": "アクティビスト",
+    "patterns": [
+      "ダルトン",
+      "Dalton"
+    ]
+  },
+  {
+    "id": "oasis",
+    "horizon": "activist",
+    "label": "オアシス",
+    "style": "アクティビスト",
+    "patterns": [
+      "オアシス",
+      "Oasis Management"
+    ]
+  },
+  {
+    "id": "3d",
+    "horizon": "activist",
+    "label": "3Dインベストメント",
+    "style": "アクティビスト",
+    "patterns": [
+      "3D Investment",
+      "３Ｄ",
+      "スリーディー"
+    ]
+  },
+  {
+    "id": "berkshire",
+    "horizon": "long",
+    "label": "バークシャー",
+    "style": "長期・大型",
+    "patterns": [
+      "バークシャー",
+      "Berkshire",
+      "ナショナル・インデムニティー",
+      "National Indemnity"
+    ]
+  }
+]
