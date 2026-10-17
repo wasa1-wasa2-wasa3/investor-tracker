@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
+import HoldInfo from "./HoldInfo";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
@@ -12,6 +13,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(null);
   const [horizon, setHorizon] = useState(null);
+  const [quotes, setQuotes] = useState({});
 
   async function load() {
     setLoading(true);
@@ -23,6 +25,16 @@ export default function Home() {
     }
   }
   useEffect(() => { load(); }, [days, all]);
+
+  // 表示中の銘柄の配当利回りなどをまとめて取る
+  useEffect(() => {
+    const codes = [...new Set((data?.filings || []).map((f) => f.secCode).filter(Boolean))].filter((c) => !quotes[c]);
+    if (!codes.length) return;
+    fetch(`/api/quotes?codes=${codes.join(",")}`)
+      .then((r) => r.json())
+      .then((j) => setQuotes((q) => ({ ...q, ...j.quotes })))
+      .catch(() => {});
+  }, [data]);
 
   const filings = useMemo(() => {
     let list = data?.filings || [];
@@ -119,6 +131,7 @@ export default function Home() {
               )}
               <a href={`/api/pdf/${f.docId}`} target="_blank" rel="noreferrer">PDF</a>
             </div>
+            {f.secCode && <HoldInfo quote={quotes[f.secCode]} yutai={f.yutai} />}
             <div className="meta">
               {f.submittedAt}・{f.description}・提出者: {f.filerName}{f.withdrawn ? "・取下げ" : ""}
             </div>

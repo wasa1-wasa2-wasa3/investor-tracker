@@ -100,3 +100,12 @@ a { color: var(--chg); }
 .pick-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); padding-left: calc(1.4em + 8px); }
 .pick-stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
 .picks-note { font-size: 11px; color: var(--muted); margin: 8px 0 0; line-height: 1.6; }
+
+.hold { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; }
+.hold-yield { font-variant-numeric: tabular-nums; color: var(--muted); }
+.hold-yield.high { color: var(--gold); font-weight: 700; }
+.hold-sub { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.yutai { font: inherit; font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); background: none; color: var(--muted); line-height: 1.5; }
+.yutai.yes { border-color: var(--new); color: var(--new); font-weight: 700; cursor: pointer; }
+.yutai.unknown { border-style: dashed; }
+.yutai-text { flex-basis: 100%; margin: 2px 0 0; font-size: 12px; color: var(--ink); background: var(--tag); border-radius: 6px; padding: 6px 8px; line-height: 1.6; }

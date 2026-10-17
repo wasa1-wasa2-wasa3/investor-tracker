@@ -25,7 +25,7 @@ export default function Picks() {
       <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary>
           <span className="picks-title">有望銘柄10選</span>
-          <span className="picks-sub">大物購入 × 配当 × 爆発力（半年以内）{!open && "　▼タップで開く"}</span>
+          <span className="picks-sub">大物購入 × 配当・優待 × 爆発力（半年以内）{!open && "　▼タップで開く"}</span>
         </summary>
 
         {!data && <div className="picks-empty">集計中…</div>}
@@ -40,7 +40,7 @@ export default function Picks() {
                   {p.name || p.secCode}
                 </a>
                 <span className="code">{p.secCode}</span>
-                <span className="total" title={`大物${p.scores.investor}・配当${p.scores.dividend}・爆発力${p.scores.explosion}`}>
+                <span className="total" title={`大物${p.scores.investor}・長期保有${p.scores.dividend}・爆発力${p.scores.explosion}`}>
                   {p.total}
                 </span>
               </div>
@@ -52,6 +52,9 @@ export default function Picks() {
               </div>
               <div className="pick-stats">
                 <span>利回り <b>{p.quote.yieldPct === 0 ? "無配" : fmt(p.quote.yieldPct, 2, "%")}</b></span>
+                {p.yutai?.status === "yes" && (
+                  <span className="yutai yes" title={p.yutai.text || ""}>優待あり</span>
+                )}
                 <span>PBR <b>{fmt(p.quote.pbr, 2)}</b></span>
                 <span>時価総額 <b>{fmtOku(p.quote.marketCapOku)}</b></span>
               </div>
@@ -61,7 +64,7 @@ export default function Picks() {
 
         {data?.picks?.length > 0 && (
           <p className="picks-note">
-            点数＝大物40＋配当30＋爆発力30。候補 {data.candidates} 銘柄から。優待は未対応。
+            点数＝大物40＋長期保有30（配当＋優待）＋爆発力30。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。
             「変更」には売却も含まれるので、PDFで保有割合を確認してください。投資判断はご自身で。
           </p>
         )}
