@@ -30,7 +30,7 @@ body {
   font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
   line-height: 1.5;
 }
-main { max-width: 880px; margin: 0 auto; padding: 24px 16px 64px; }
+main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
 h1 { font-size: 22px; margin: 0 0 4px; }
 .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
@@ -74,3 +74,29 @@ a { color: var(--chg); }
 .htag.long { color: var(--gold); border-color: var(--gold); }
 .item.hot { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
 .star { color: var(--gold); font-size: 16px; }
+
+.layout { display: flex; flex-direction: column; gap: 16px; }
+.feed { min-width: 0; }
+@media (min-width: 1000px) {
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 24px; }
+  .picks { grid-column: 2; grid-row: 1; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
+  .feed { grid-column: 1; grid-row: 1; }
+}
+.picks { background: var(--card); border: 1px solid var(--gold); border-radius: 12px; padding: 12px 14px; }
+.picks summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.picks summary::-webkit-details-marker { display: none; }
+.picks-title { font-weight: 700; font-size: 16px; }
+.picks-title::before { content: "★ "; color: var(--gold); }
+.picks-sub { font-size: 12px; color: var(--muted); }
+.picks-empty { font-size: 13px; color: var(--muted); padding: 12px 0; }
+.picks-list { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; }
+.pick { padding: 10px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.pick-head { display: flex; align-items: baseline; gap: 8px; }
+.rank { font-weight: 700; color: var(--gold); min-width: 1.4em; font-variant-numeric: tabular-nums; }
+.pick-name { font-weight: 700; color: var(--ink); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pick-name:hover { text-decoration: underline; }
+.total { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; border: 1px solid var(--gold); color: var(--gold); border-radius: 999px; padding: 0 8px; font-size: 13px; flex-shrink: 0; }
+.pick-who { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; padding-left: calc(1.4em + 8px); }
+.pick-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); padding-left: calc(1.4em + 8px); }
+.pick-stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.picks-note { font-size: 11px; color: var(--muted); margin: 8px 0 0; line-height: 1.6; }

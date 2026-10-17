@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
+import Picks from "./Picks";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
@@ -52,6 +53,9 @@ export default function Home() {
       <h1>大物ウォッチ</h1>
       <p className="sub">EDINETの大量保有報告書から、ウォッチ対象の投資家の新規・変更を拾います（PoC）</p>
 
+      <div className="layout">
+      <Picks />
+      <section className="feed">
       <div className="controls">
         <select value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value={1}>今日</option>
@@ -121,6 +125,8 @@ export default function Home() {
           </div>
         ))}
         {!loading && filings.length === 0 && <div className="empty">該当する報告書はありません</div>}
+      </div>
+      </section>
       </div>
     </main>
   );
