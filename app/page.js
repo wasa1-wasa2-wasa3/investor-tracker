@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { WATCHLIST } from "../lib/watchlist";
+import { WATCHLIST, HORIZONS } from "../lib/watchlist";
+
+const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
 export default function Home() {
   const [days, setDays] = useState(7);
@@ -8,6 +10,7 @@ export default function Home() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(null);
+  const [horizon, setHorizon] = useState(null);
 
   async function load() {
     setLoading(true);
@@ -21,9 +24,22 @@ export default function Home() {
   useEffect(() => { load(); }, [days, all]);
 
   const filings = useMemo(() => {
-    const list = data?.filings || [];
-    return filter ? list.filter((f) => f.investorId === filter) : list;
-  }, [data, filter]);
+    let list = data?.filings || [];
+    if (horizon) list = list.filter((f) => f.horizon === horizon);
+    if (filter) list = list.filter((f) => f.investorId === filter);
+    return list;
+  }, [data, filter, horizon]);
+
+  const hcounts = useMemo(() => {
+    const c = {};
+    for (const f of data?.filings || []) if (f.horizon) c[f.horizon] = (c[f.horizon] || 0) + 1;
+    return c;
+  }, [data]);
+
+  function pickHorizon(h) {
+    setHorizon(h);
+    setFilter(null);
+  }
 
   const counts = useMemo(() => {
     const c = {};
@@ -53,9 +69,18 @@ export default function Home() {
       {data?.mock && <div className="banner">モックデータを表示中です。EDINET_API_KEY を設定すると実データに切り替わります。</div>}
       {data?.errors?.length > 0 && <div className="banner">一部の日付で取得エラー: {data.errors.join(" / ")}</div>}
 
+      <div className="tabs">
+        <button className={`tab ${!horizon ? "on" : ""}`} onClick={() => pickHorizon(null)}>すべて</button>
+        {HORIZONS.map((h) => (
+          <button key={h.id} className={`tab ${horizon === h.id ? "on" : ""}`} onClick={() => pickHorizon(h.id)}>
+            {h.label}{hcounts[h.id] ? ` ${hcounts[h.id]}` : ""}
+          </button>
+        ))}
+      </div>
+
       <div className="chips">
         <button className={`chip ${!filter ? "on" : ""}`} onClick={() => setFilter(null)}>すべて</button>
-        {WATCHLIST.map((w) => (
+        {WATCHLIST.filter((w) => !horizon || w.horizon === horizon).map((w) => (
           <button key={w.id} className={`chip ${filter === w.id ? "on" : ""}`} onClick={() => setFilter(w.id)}>
             {w.label}{counts[w.id] ? ` ${counts[w.id]}` : ""}
           </button>
@@ -64,10 +89,12 @@ export default function Home() {
 
       <div className="list">
         {filings.map((f) => (
-          <div key={f.docId} className={`item ${f.investorId ? "" : "other"}`}>
+          <div key={f.docId} className={`item ${f.investorId ? "" : "other"} ${f.horizon === "long" && f.docType === "新規" ? "hot" : ""}`}>
             <div className="top">
+              {f.horizon === "long" && f.docType === "新規" && <span className="star" title="長期投資家の新規">★</span>}
               <span className={`badge ${f.docType === "新規" ? "new" : f.docType === "訂正" ? "fix" : "chg"}`}>{f.docType}</span>
               <span className="who">{f.investor || f.filerName}</span>
+              {f.horizon && <span className={`htag ${f.horizon}`}>{HORIZON_LABEL[f.horizon]}</span>}
               <span>→</span>
               <span className="target">{f.targetName || f.targetEdinetCode || "対象不明"}</span>
               {f.secCode && <span className="code">{f.secCode}</span>}
