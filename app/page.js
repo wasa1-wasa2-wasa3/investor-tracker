@@ -43,11 +43,16 @@ export default function Home() {
     return list;
   }, [data, filter, horizon]);
 
+  // 訂正は「動き」ではないので本体から外し、末尾に折りたたんで出す
+  const mainList = useMemo(() => filings.filter((f) => f.docType !== "訂正"), [filings]);
+  const fixList = useMemo(() => filings.filter((f) => f.docType === "訂正"), [filings]);
+  const moves = useMemo(() => (data?.filings || []).filter((f) => f.docType !== "訂正"), [data]);
+
   const hcounts = useMemo(() => {
     const c = {};
-    for (const f of data?.filings || []) if (f.horizon) c[f.horizon] = (c[f.horizon] || 0) + 1;
+    for (const f of moves) if (f.horizon) c[f.horizon] = (c[f.horizon] || 0) + 1;
     return c;
-  }, [data]);
+  }, [moves]);
 
   function pickHorizon(h) {
     setHorizon(h);
@@ -56,9 +61,9 @@ export default function Home() {
 
   const counts = useMemo(() => {
     const c = {};
-    for (const f of data?.filings || []) if (f.investorId) c[f.investorId] = (c[f.investorId] || 0) + 1;
+    for (const f of moves) if (f.investorId) c[f.investorId] = (c[f.investorId] || 0) + 1;
     return c;
-  }, [data]);
+  }, [moves]);
 
   return (
     <main>
@@ -114,7 +119,7 @@ export default function Home() {
       </div>
 
       <div className="list">
-        {filings.map((f) => (
+        {mainList.map((f) => (
           <div key={f.docId} className={`item ${f.investorId ? "" : "other"} ${f.horizon === "long" && f.docType === "新規" ? "hot" : ""}`}>
             <div className="top">
               {f.horizon === "long" && f.docType === "新規" && <span className="star" title="長期投資家の新規">★</span>}
@@ -137,8 +142,24 @@ export default function Home() {
             </div>
           </div>
         ))}
-        {!loading && filings.length === 0 && <div className="empty">該当する報告書はありません</div>}
+        {!loading && mainList.length === 0 && <div className="empty">該当する報告書はありません</div>}
       </div>
+
+      {fixList.length > 0 && (
+        <details className="fixes">
+          <summary>訂正報告書 {fixList.length}件<span className="fixes-note">（過去の報告書の記載ミスの修正。売買の動きではありません）</span></summary>
+          <div className="fix-list">
+            {fixList.map((f) => (
+              <div key={f.docId} className="fix-row">
+                <span className="fix-date">{f.submittedAt?.slice(5, 16)}</span>
+                <span className="fix-who">{f.investor || f.filerName}</span>
+                <span className="fix-target">→ {f.targetName || f.targetEdinetCode || "対象不明"}{f.secCode ? ` ${f.secCode}` : ""}</span>
+                <a href={`/api/pdf/${f.docId}`} target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
       </section>
       </div>
     </main>

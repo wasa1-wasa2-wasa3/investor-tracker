@@ -109,3 +109,12 @@ a { color: var(--chg); }
 .yutai.yes { border-color: var(--new); color: var(--new); font-weight: 700; cursor: pointer; }
 .yutai.unknown { border-style: dashed; }
 .yutai-text { flex-basis: 100%; margin: 2px 0 0; font-size: 12px; color: var(--ink); background: var(--tag); border-radius: 6px; padding: 6px 8px; line-height: 1.6; }
+
+.fixes { margin-top: 16px; border: 1px dashed var(--line); border-radius: 10px; padding: 8px 12px; color: var(--muted); }
+.fixes summary { cursor: pointer; font-size: 13px; font-weight: 700; }
+.fixes-note { font-weight: 400; font-size: 11px; margin-left: 4px; }
+.fix-list { display: flex; flex-direction: column; margin-top: 6px; }
+.fix-row { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; font-size: 12px; padding: 6px 0; border-top: 1px solid var(--line); }
+.fix-date { font-variant-numeric: tabular-nums; }
+.fix-who { color: var(--ink); }
+.fix-row a { margin-left: auto; }
