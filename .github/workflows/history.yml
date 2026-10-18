@@ -44,6 +44,11 @@ jobs:
         env:
           EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
         run: node scripts/update-yutai.mjs
+      - name: 大量保有報告書から保有割合を取得
+        continue-on-error: true
+        env:
+          EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
+        run: node scripts/update-holdings.mjs
       - name: 変更があればコミット
         run: |
           if git diff --quiet data/; then
@@ -52,6 +57,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/history.json data/yutai.json data/asr-index.json
+          git add data/history.json data/yutai.json data/asr-index.json data/holdings.json
           git commit -m "履歴を更新 $(date -u +%Y-%m-%d)"
           git push

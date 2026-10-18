@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
-import HoldInfo from "./HoldInfo";
+import HoldingRow from "./HoldingRow";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
@@ -14,6 +14,7 @@ export default function Home() {
   const [filter, setFilter] = useState(null);
   const [horizon, setHorizon] = useState(null);
   const [quotes, setQuotes] = useState({});
+  const [holdings, setHoldings] = useState({});
 
   async function load() {
     setLoading(true);
@@ -36,6 +37,23 @@ export default function Home() {
       .catch(() => {});
   }, [data]);
 
+  // 各報告書の保有割合をまとめて取る（訂正は除く）
+  useEffect(() => {
+    const ids = (data?.filings || []).filter((f) => f.docType !== "訂正").map((f) => f.docId).filter((id) => !(id in holdings));
+    if (!ids.length) return;
+    let cancelled = false;
+    (async () => {
+      for (let i = 0; i < ids.length && !cancelled; i += 100) {
+        try {
+          const j = await (await fetch(`/api/holdings?ids=${ids.slice(i, i + 100).join(",")}`)).json();
+          const got = { ...j.holdings };
+          if (!cancelled) setHoldings((h) => ({ ...h, ...got }));
+        } catch {}
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [data]);
+
   const filings = useMemo(() => {
     let list = data?.filings || [];
     if (horizon) list = list.filter((f) => f.horizon === horizon);
@@ -45,6 +63,16 @@ export default function Home() {
 
   // 訂正は「動き」ではないので本体から外し、末尾に折りたたんで出す
   const mainList = useMemo(() => filings.filter((f) => f.docType !== "訂正"), [filings]);
+  // 投資家×銘柄で1行にまとめる（並びは最新の報告書の新しい順）
+  const groups = useMemo(() => {
+    const map = new Map();
+    for (const f of mainList) {
+      const key = `${f.investorId || f.filerName}|${f.secCode || f.targetEdinetCode}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(f);
+    }
+    return [...map.values()];
+  }, [mainList]);
   const fixList = useMemo(() => filings.filter((f) => f.docType === "訂正"), [filings]);
   const moves = useMemo(() => (data?.filings || []).filter((f) => f.docType !== "訂正"), [data]);
 
@@ -68,7 +96,7 @@ export default function Home() {
   return (
     <main>
       <h1>イナゴライダー</h1>
-      <p className="sub">大物投資家が買った銘柄に乗る。EDINETの大量保有報告書から新規・変更を拾います</p>
+      <p className="sub">大物投資家が買った銘柄に乗る。EDINETの大量保有報告書から、誰がいま何%持っているかを拾います</p>
 
       <div className="layout">
       <Picks />
@@ -119,28 +147,14 @@ export default function Home() {
       </div>
 
       <div className="list">
-        {mainList.map((f) => (
-          <div key={f.docId} className={`item ${f.investorId ? "" : "other"} ${f.horizon === "long" && f.docType === "新規" ? "hot" : ""}`}>
-            <div className="top">
-              {f.horizon === "long" && f.docType === "新規" && <span className="star" title="長期投資家の新規">★</span>}
-              <span className={`badge ${f.docType === "新規" ? "new" : f.docType === "訂正" ? "fix" : "chg"}`}>{f.docType}</span>
-              <span className="who">{f.investor || f.filerName}</span>
-              {f.horizon && <span className={`htag ${f.horizon}`}>{HORIZON_LABEL[f.horizon]}</span>}
-              <span>→</span>
-              <span className="target">{f.targetName || f.targetEdinetCode || "対象不明"}</span>
-              {f.secCode && <span className="code">{f.secCode}</span>}
-            </div>
-            <div className="links">
-              {f.secCode && (
-                <a href={`https://kabutan.jp/stock/?code=${f.secCode}`} target="_blank" rel="noreferrer">株探</a>
-              )}
-              <a href={`/api/pdf/${f.docId}`} target="_blank" rel="noreferrer">PDF</a>
-            </div>
-            {f.secCode && <HoldInfo quote={quotes[f.secCode]} yutai={f.yutai} />}
-            <div className="meta">
-              {f.submittedAt}・{f.description}・提出者: {f.filerName}{f.withdrawn ? "・取下げ" : ""}
-            </div>
-          </div>
+        {groups.map((g) => (
+          <HoldingRow
+            key={g[0].docId}
+            group={g}
+            holdings={holdings}
+            quote={quotes[g[0].secCode]}
+            horizonLabel={HORIZON_LABEL[g[0].horizon]}
+          />
         ))}
         {!loading && mainList.length === 0 && <div className="empty">該当する報告書はありません</div>}
       </div>
