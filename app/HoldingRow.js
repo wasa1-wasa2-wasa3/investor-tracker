@@ -4,6 +4,8 @@ import HoldInfo from "./HoldInfo";
 
 const THRESHOLD = 5; // 大量保有報告の基準。これを割ると報告義務がなくなる＝実質売り抜け
 
+const PURPOSE_CLASS = { 純投資: "pure", 提案あり: "act", 経営参加: "act", 政策: "pol", 業務上: "etc", その他: "etc" };
+
 const fmt = (n) => `${n.toFixed(2)}%`;
 const fmtDiff = (d) => `${d > 0 ? "+" : ""}${d.toFixed(2)}`;
 
@@ -22,9 +24,11 @@ export function holdingState(group, holdings) {
 
 export default function HoldingRow({ group, holdings, quote, horizonLabel }) {
   const [open, setOpen] = useState(false);
+  const [showPurpose, setShowPurpose] = useState(false);
   const f = group[0];
   const st = holdingState(group, holdings);
   const isNew = f.docType === "新規";
+  const purpose = group.map((g) => holdings[g.docId]?.purpose).find(Boolean);
   const hot = f.horizon === "long" && group.some((g) => g.docType === "新規") && !st.sold;
 
   let status;
@@ -66,7 +70,21 @@ export default function HoldingRow({ group, holdings, quote, horizonLabel }) {
         )}
         <a href={`/api/pdf/${f.docId}`} target="_blank" rel="noreferrer">PDF</a>
       </div>
-      <div className="status">{status}</div>
+      <div className="status">
+        {status}
+        {purpose && (
+          <button
+            type="button"
+            className={`ptag p-${PURPOSE_CLASS[purpose.tag] || "etc"}`}
+            onClick={() => setShowPurpose((o) => !o)}
+            aria-expanded={showPurpose}
+            title="保有目的（報告書の記載）"
+          >
+            {purpose.tag} {showPurpose ? "▲" : "▼"}
+          </button>
+        )}
+        {purpose && showPurpose && <p className="purpose-text">保有目的：{purpose.text}</p>}
+      </div>
       {f.secCode && <HoldInfo quote={quote} yutai={f.yutai} />}
       <div className="meta">
         最新 {f.submittedAt}・{f.docType}

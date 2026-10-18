@@ -43,7 +43,7 @@ const keep = new Set(history.items.map((d) => d.docID));
 for (const id of Object.keys(store.items)) if (!keep.has(id)) delete store.items[id]; // 履歴から落ちた分は消す
 
 const targets = history.items.filter(
-  (d) => d.docTypeCode === "350" && !String(d.docDescription || "").includes("訂正") && store.items[d.docID] == null
+  (d) => d.docTypeCode === "350" && !String(d.docDescription || "").includes("訂正") && (store.items[d.docID] == null || !("purpose" in store.items[d.docID]))
 );
 console.log(`保有割合: 新しく ${targets.length} 件を読みます`);
 let ok = 0, miss = 0, err = 0;

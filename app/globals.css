@@ -133,3 +133,8 @@ a { color: var(--chg); }
 .history li { display: flex; gap: 10px; align-items: baseline; padding: 4px 0; border-top: 1px solid var(--line); }
 .h-ratio { font-variant-numeric: tabular-nums; color: var(--ink); }
 .history li a { margin-left: auto; }
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.ptag { font: inherit; font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; line-height: 1.5; }
+.ptag.p-pure { border-color: var(--gold); color: var(--gold); font-weight: 700; }
+.ptag.p-act { border-color: var(--new); color: var(--new); font-weight: 700; }
+.purpose-text { flex-basis: 100%; margin: 2px 0 0; font-size: 12px; color: var(--ink); background: var(--tag); border-radius: 6px; padding: 6px 8px; line-height: 1.6; }
