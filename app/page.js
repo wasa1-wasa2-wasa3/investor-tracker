@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
 import HoldingRow from "./HoldingRow";
+import { ownReason, stockReasons, incomeReason } from "../lib/fit";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
@@ -64,15 +65,39 @@ export default function Home() {
   // 訂正は「動き」ではないので本体から外し、末尾に折りたたんで出す
   const mainList = useMemo(() => filings.filter((f) => f.docType !== "訂正"), [filings]);
   // 投資家×銘柄で1行にまとめる（並びは最新の報告書の新しい順）
-  const groups = useMemo(() => {
+  const groupKey = (f) => `${f.investorId || f.filerName}|${f.secCode || f.targetEdinetCode}`;
+  const secKey = (f) => f.secCode || f.targetEdinetCode;
+  const groupUp = (list) => {
     const map = new Map();
-    for (const f of mainList) {
-      const key = `${f.investorId || f.filerName}|${f.secCode || f.targetEdinetCode}`;
+    for (const f of list) {
+      const key = groupKey(f);
       if (!map.has(key)) map.set(key, []);
       map.get(key).push(f);
     }
     return [...map.values()];
-  }, [mainList]);
+  };
+  const entryOf = (g) => ({
+    secKey: secKey(g[0]),
+    who: g[0].investor || g[0].filerName,
+    tob: g[0].tob,
+    ratio: holdings[g[0].docId]?.ratio ?? null,
+    purpose: g.map((x) => holdings[x.docId]?.purpose).find(Boolean),
+  });
+  // 銘柄ごとの目的外理由は、絞り込み前の全データで判定する
+  const stockOff = useMemo(
+    () => stockReasons(groupUp((data?.filings || []).filter((f) => f.docType !== "訂正")).map(entryOf)),
+    [data, holdings]
+  );
+  const [groups, offGroups] = useMemo(() => {
+    const keep = [], off = [];
+    for (const g of groupUp(mainList)) {
+      const reason =
+        ownReason(entryOf(g)) || stockOff[secKey(g[0])] || incomeReason(quotes[g[0].secCode]?.yieldPct, g[0].yutai);
+      if (reason) off.push({ g, reason });
+      else keep.push(g);
+    }
+    return [keep, off];
+  }, [mainList, holdings, stockOff, quotes]);
   const fixList = useMemo(() => filings.filter((f) => f.docType === "訂正"), [filings]);
   const moves = useMemo(() => (data?.filings || []).filter((f) => f.docType !== "訂正"), [data]);
 
@@ -158,6 +183,22 @@ export default function Home() {
         ))}
         {!loading && mainList.length === 0 && <div className="empty">該当する報告書はありません</div>}
       </div>
+
+      {offGroups.length > 0 && (
+        <details className="fixes">
+          <summary>目的外 {offGroups.length}件<span className="fixes-note">（低配当で優待なし・TOB・親会社級の大株主・持ち合いなど）</span></summary>
+          <div className="fix-list">
+            {offGroups.map(({ g, reason }) => (
+              <div key={g[0].docId} className="fix-row">
+                <span className="fix-who">{g[0].investor || g[0].filerName}</span>
+                <span className="fix-target">→ {g[0].targetName || g[0].targetEdinetCode || "対象不明"}{g[0].secCode ? ` ${g[0].secCode}` : ""}</span>
+                <span className="off-reason">{reason}</span>
+                <a href={`/api/pdf/${g[0].docId}`} target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
 
       {fixList.length > 0 && (
         <details className="fixes">

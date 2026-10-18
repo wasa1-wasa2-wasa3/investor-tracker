@@ -76,6 +76,9 @@ const days = argDays || (history.items.length === 0 && !history.oldest ? FULL_DA
 // 前回失敗した日も取り直す
 const dates = [...new Set([...datesBack(days), ...(history.failedDates || [])])].sort().reverse();
 const byId = new Map(history.items.map((d) => [d.docID, d]));
+// TOB（公開買付届出書=240／公開買付報告書=270）の対象会社。買収で上場廃止に向かう銘柄を外すのに使う
+const TOB_TYPES = new Set(["240", "270"]);
+const tob = history.tob || {};
 let added = 0;
 const failed = [];
 const failedDates = [];
@@ -85,6 +88,10 @@ for (const [i, date] of dates.entries()) {
   try {
     const docs = await fetchDay(date);
     for (const d of docs) {
+      if (TOB_TYPES.has(d.docTypeCode) && d.subjectEdinetCode && d.withdrawalStatus !== "1") {
+        const prev = tob[d.subjectEdinetCode];
+        if (!prev || d.submitDateTime > prev.at) tob[d.subjectEdinetCode] = { at: d.submitDateTime, filerName: d.filerName, docTypeCode: d.docTypeCode };
+      }
       if (d.docTypeCode !== "350" && d.docTypeCode !== "360") continue;
       if (!isWatched(d.filerName || "")) continue;
       if (!byId.has(d.docID)) added++;
@@ -109,9 +116,12 @@ for (const [i, date] of dates.entries()) {
 
 const items = [...byId.values()].sort((a, b) => (a.submitDateTime < b.submitDateTime ? 1 : -1));
 const oldest = [history.oldest, dates.at(-1)].filter(Boolean).sort()[0];
-fs.writeFileSync(HISTORY, JSON.stringify({ updatedAt: new Date().toISOString(), oldest, failedDates, items }) + "\n");
+// 1年より前のTOBは忘れる（上場廃止済みか、不成立で普通の銘柄に戻っている）
+const tobCutoff = datesBack(365).at(-1);
+for (const [k, v] of Object.entries(tob)) if (v.at.slice(0, 10) < tobCutoff) delete tob[k];
+fs.writeFileSync(HISTORY, JSON.stringify({ updatedAt: new Date().toISOString(), oldest, failedDates, tob, items }) + "\n");
 
-console.log(`完了: 全 ${items.length} 件（今回の新規 ${added} 件）`);
+console.log(`完了: 全 ${items.length} 件（今回の新規 ${added} 件）／TOB対象 ${Object.keys(tob).length} 社`);
 if (failed.length) {
   console.log(`取得に失敗した日: ${failed.length} 日`);
   failed.slice(0, 20).forEach((f) => console.log("  " + f));
