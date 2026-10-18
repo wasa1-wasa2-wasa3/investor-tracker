@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import HoldInfo from "./HoldInfo";
+import { buildUp } from "../lib/trend";
 
 const THRESHOLD = 5; // 大量保有報告の基準。これを割ると報告義務がなくなる＝実質売り抜け
 
@@ -28,6 +29,7 @@ export default function HoldingRow({ group, holdings, quote, horizonLabel }) {
   const f = group[0];
   const st = holdingState(group, holdings);
   const isNew = f.docType === "新規";
+  const trend = buildUp(group, holdings);
   const purpose = group.map((g) => holdings[g.docId]?.purpose).find(Boolean);
   const hot = f.horizon === "long" && group.some((g) => g.docType === "新規") && !st.sold;
 
@@ -72,6 +74,11 @@ export default function HoldingRow({ group, holdings, quote, horizonLabel }) {
       </div>
       <div className="status">
         {status}
+        {trend.streak >= 2 && !st.sold && (
+          <span className="buildup" title="報告書ごとの保有割合が続けて増えている回数">
+            {trend.streak}回連続↑ {trend.from === 0 ? "新規" : fmt(trend.from)}→{fmt(trend.to)}
+          </span>
+        )}
         {purpose && (
           <button
             type="button"

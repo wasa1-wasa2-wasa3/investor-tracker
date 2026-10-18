@@ -139,3 +139,5 @@ a { color: var(--chg); }
 .ptag.p-act { border-color: var(--new); color: var(--new); font-weight: 700; }
 .purpose-text { flex-basis: 100%; margin: 2px 0 0; font-size: 12px; color: var(--ink); background: var(--tag); border-radius: 6px; padding: 6px 8px; line-height: 1.6; }
 .off-reason { flex-basis: 100%; order: 3; color: var(--muted); font-size: 11px; }
+.buildup { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; color: var(--new); background: color-mix(in srgb, var(--new) 12%, transparent); font-variant-numeric: tabular-nums; }
+.buying-toggle.on { background: var(--new); border-color: var(--new); color: #fff; font-weight: 700; }

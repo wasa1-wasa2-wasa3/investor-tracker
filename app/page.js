@@ -4,6 +4,7 @@ import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
 import HoldingRow from "./HoldingRow";
 import { ownReason, stockReasons, incomeReason } from "../lib/fit";
+import { buildUp, isBuildingUp } from "../lib/trend";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
 
@@ -16,6 +17,7 @@ export default function Home() {
   const [horizon, setHorizon] = useState(null);
   const [quotes, setQuotes] = useState({});
   const [holdings, setHoldings] = useState({});
+  const [buying, setBuying] = useState(false); // 「買い増し中」だけに絞る
 
   async function load() {
     setLoading(true);
@@ -44,9 +46,10 @@ export default function Home() {
     if (!ids.length) return;
     let cancelled = false;
     (async () => {
-      for (let i = 0; i < ids.length && !cancelled; i += 100) {
+      // 1回で読める件数（サーバー側の上限30）ずつ、順番に取りに行く
+      for (let i = 0; i < ids.length && !cancelled; i += 30) {
         try {
-          const j = await (await fetch(`/api/holdings?ids=${ids.slice(i, i + 100).join(",")}`)).json();
+          const j = await (await fetch(`/api/holdings?ids=${ids.slice(i, i + 30).join(",")}`)).json();
           const got = { ...j.holdings };
           if (!cancelled) setHoldings((h) => ({ ...h, ...got }));
         } catch {}
@@ -94,10 +97,16 @@ export default function Home() {
       const reason =
         ownReason(entryOf(g)) || stockOff[secKey(g[0])] || incomeReason(quotes[g[0].secCode]?.yieldPct, g[0].yutai);
       if (reason) off.push({ g, reason });
-      else keep.push(g);
+      else if (!buying || isBuildingUp(buildUp(g, holdings))) keep.push(g);
     }
     return [keep, off];
-  }, [mainList, holdings, stockOff, quotes]);
+  }, [mainList, holdings, stockOff, quotes, buying]);
+
+  // 買い増しは何回分かの報告書が要るので、短い期間のときは半年に広げる
+  function toggleBuying() {
+    if (!buying && days < 90) setDays(180);
+    setBuying((b) => !b);
+  }
   const fixList = useMemo(() => filings.filter((f) => f.docType === "訂正"), [filings]);
   const moves = useMemo(() => (data?.filings || []).filter((f) => f.docType !== "訂正"), [data]);
 
@@ -136,6 +145,9 @@ export default function Home() {
           <option value={90}>90日</option>
           <option value={180}>半年</option>
         </select>
+        <button className={`buying-toggle ${buying ? "on" : ""}`} onClick={toggleBuying} aria-pressed={buying}>
+          ↑ 買い増し中
+        </button>
         <label className="chk">
           <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
           対象外の提出者も表示
@@ -181,7 +193,9 @@ export default function Home() {
             horizonLabel={HORIZON_LABEL[g[0].horizon]}
           />
         ))}
-        {!loading && mainList.length === 0 && <div className="empty">該当する報告書はありません</div>}
+        {!loading && groups.length === 0 && (
+          <div className="empty">{buying ? "この期間に続けて買い増している銘柄はありません" : "該当する報告書はありません"}</div>
+        )}
       </div>
 
       {offGroups.length > 0 && (

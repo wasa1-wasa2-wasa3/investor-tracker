@@ -46,6 +46,11 @@ export default function Picks() {
               </div>
               <div className="pick-who">
                 {p.hasNew && <span className="star" title="長期・アクティビストの新規あり">★</span>}
+                {p.buildingUp && (
+                  <span className="buildup" title={`${p.buildingUp.who}が続けて買い増し`}>
+                    買い増し中 {p.buildingUp.from === 0 ? "新規" : `${p.buildingUp.from.toFixed(1)}%`}→{p.buildingUp.to.toFixed(1)}%
+                  </span>
+                )}
                 {p.investors.map((v) => (
                   <span key={v.id} className={`htag ${v.horizon}`}>{v.label}</span>
                 ))}
@@ -64,8 +69,8 @@ export default function Picks() {
 
         {data?.picks?.length > 0 && (
           <p className="picks-note">
-            点数＝大物40＋長期保有30（配当＋優待）＋爆発力30。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。
-            「変更」には売却も含まれるので、PDFで保有割合を確認してください。投資判断はご自身で。
+            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。
+            投資判断はご自身で。
           </p>
         )}
       </details>
