@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { hasYutai } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
 const fmt = (v, d = 1, unit = "") => (v == null ? "—" : `${v.toFixed(d)}${unit}`);
@@ -7,6 +8,7 @@ const fmt = (v, d = 1, unit = "") => (v == null ? "—" : `${v.toFixed(d)}${unit
 export default function Picks() {
   const [data, setData] = useState(null);
   const [open, setOpen] = useState(true);
+  const [yutaiOnly, setYutaiOnly] = useState(false); // 「優待ありのみ」：10選に関係なく優待あり銘柄を全件
 
   // スマホでは一覧を先に見られるよう、最初は閉じておく
   useEffect(() => {
@@ -20,19 +22,32 @@ export default function Picks() {
       .catch(() => setData({ error: "読み込みに失敗しました", picks: [] }));
   }, []);
 
+  const list = (yutaiOnly ? data?.yutaiPicks : data?.picks) || [];
+
   return (
     <aside className="picks">
       <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary>
-          <span className="picks-title">有望銘柄10選</span>
+          <span className="picks-title">{yutaiOnly ? `優待あり銘柄（${list.length}件）` : "有望銘柄10選"}</span>
           <span className="picks-sub">大物購入 × 配当・優待 × 爆発力（半年以内）{!open && "　▼タップで開く"}</span>
         </summary>
 
+        <button
+          className={`yutai-toggle ${yutaiOnly ? "on" : ""}`}
+          onClick={() => setYutaiOnly((v) => !v)}
+          aria-pressed={yutaiOnly}
+        >
+          優待ありのみ
+        </button>
+
         {!data && <div className="picks-empty">集計中…</div>}
         {data?.error && <div className="picks-empty">{data.error}</div>}
+        {data && !data.error && yutaiOnly && list.length === 0 && (
+          <div className="picks-empty">優待あり銘柄はありません</div>
+        )}
 
         <ol className="picks-list">
-          {data?.picks?.map((p, i) => (
+          {list.map((p, i) => (
             <li key={p.secCode} className="pick">
               <div className="pick-head">
                 <span className="rank">{i + 1}</span>
@@ -57,7 +72,7 @@ export default function Picks() {
               </div>
               <div className="pick-stats">
                 <span>利回り <b>{p.quote.yieldPct === 0 ? "無配" : fmt(p.quote.yieldPct, 2, "%")}</b></span>
-                {p.yutai?.status === "yes" && (
+                {hasYutai(p.yutai) && (
                   <span className="yutai yes" title={p.yutai.text || ""}>優待あり</span>
                 )}
                 <span>PBR <b>{fmt(p.quote.pbr, 2)}</b></span>
@@ -67,7 +82,7 @@ export default function Picks() {
           ))}
         </ol>
 
-        {data?.picks?.length > 0 && (
+        {list.length > 0 && (
           <p className="picks-note">
             点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。
             投資判断はご自身で。

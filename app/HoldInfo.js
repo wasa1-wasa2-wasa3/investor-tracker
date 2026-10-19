@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { hasYutai as isYutai } from "../lib/fit";
 
 // 各行の「長く持てるか」：配当利回り・優待
 export default function HoldInfo({ quote, yutai }) {
@@ -7,7 +8,7 @@ export default function HoldInfo({ quote, yutai }) {
   const y = quote?.yieldPct;
   const yieldText = quote == null ? "…" : y == null ? "—" : y === 0 ? "無配" : `${y.toFixed(2)}%`;
   const high = y != null && y >= 3;
-  const hasYutai = yutai?.status === "yes";
+  const hasYutai = isYutai(yutai);
 
   return (
     <div className="hold">

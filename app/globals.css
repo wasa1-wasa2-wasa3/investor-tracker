@@ -141,3 +141,5 @@ a { color: var(--chg); }
 .off-reason { flex-basis: 100%; order: 3; color: var(--muted); font-size: 11px; }
 .buildup { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; color: var(--new); background: color-mix(in srgb, var(--new) 12%, transparent); font-variant-numeric: tabular-nums; }
 .buying-toggle.on { background: var(--new); border-color: var(--new); color: #fff; font-weight: 700; }
+.yutai-toggle { font: inherit; font-size: 12px; margin: 8px 0 0; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--new); background: none; color: var(--new); cursor: pointer; }
+.yutai-toggle.on { background: var(--new); color: #fff; font-weight: 700; }
