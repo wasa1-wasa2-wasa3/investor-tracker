@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- イナゴライダー：緑の地に、右へ跳ぶイナゴ -->
+  <rect width="64" height="64" rx="14" fill="#3d8b37"/>
+  <g fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 胴体 -->
+    <ellipse cx="30" cy="36" rx="17" ry="7.5" transform="rotate(-14 30 36)" stroke="none"/>
+    <!-- 頭 -->
+    <circle cx="47" cy="29" r="7.5" stroke="none"/>
+    <!-- 触角 -->
+    <path d="M50 23 Q55 12 60 10" fill="none" stroke-width="3"/>
+    <!-- 跳ぶ後ろ脚 -->
+    <path d="M20 37 L28 18 L15 50" fill="none" stroke-width="5.5"/>
+    <!-- 前脚 -->
+    <path d="M40 40 L43 50" fill="none" stroke-width="3.5"/>
+  </g>
+  <!-- 目 -->
+  <circle cx="49.5" cy="27.5" r="2.4" fill="#1d1d1b"/>
+</svg>
