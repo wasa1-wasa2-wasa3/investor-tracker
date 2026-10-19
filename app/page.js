@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
 import HoldingRow from "./HoldingRow";
-import { ownReason, stockReasons, incomeReason } from "../lib/fit";
+import { ownReason, stockReasons, incomeReason, hasYutai } from "../lib/fit";
 import { buildUp, isBuildingUp } from "../lib/trend";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
@@ -18,6 +18,7 @@ export default function Home() {
   const [quotes, setQuotes] = useState({});
   const [holdings, setHoldings] = useState({});
   const [buying, setBuying] = useState(false); // 「買い増し中」だけに絞る
+  const [yutaiOnly, setYutaiOnly] = useState(false); // 「優待あり」だけに絞る
 
   async function load() {
     setLoading(true);
@@ -97,10 +98,11 @@ export default function Home() {
       const reason =
         ownReason(entryOf(g)) || stockOff[secKey(g[0])] || incomeReason(quotes[g[0].secCode]?.yieldPct, g[0].yutai);
       if (reason) off.push({ g, reason });
+      else if (yutaiOnly && !hasYutai(g[0].yutai)) continue;
       else if (!buying || isBuildingUp(buildUp(g, holdings))) keep.push(g);
     }
     return [keep, off];
-  }, [mainList, holdings, stockOff, quotes, buying]);
+  }, [mainList, holdings, stockOff, quotes, buying, yutaiOnly]);
 
   // 買い増しは何回分かの報告書が要るので、短い期間のときは半年に広げる
   function toggleBuying() {
@@ -148,6 +150,9 @@ export default function Home() {
         <button className={`buying-toggle ${buying ? "on" : ""}`} onClick={toggleBuying} aria-pressed={buying}>
           ↑ 買い増し中
         </button>
+        <button className={`buying-toggle ${yutaiOnly ? "on" : ""}`} onClick={() => setYutaiOnly((v) => !v)} aria-pressed={yutaiOnly}>
+          優待あり
+        </button>
         <label className="chk">
           <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
           対象外の提出者も表示
@@ -194,7 +199,13 @@ export default function Home() {
           />
         ))}
         {!loading && groups.length === 0 && (
-          <div className="empty">{buying ? "この期間に続けて買い増している銘柄はありません" : "該当する報告書はありません"}</div>
+          <div className="empty">
+            {buying
+              ? "この期間に続けて買い増している銘柄はありません"
+              : yutaiOnly
+                ? "この期間に優待あり銘柄はありません"
+                : "該当する報告書はありません"}
+          </div>
         )}
       </div>
 
