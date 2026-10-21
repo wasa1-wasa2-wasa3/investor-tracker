@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
 import HoldingRow from "./HoldingRow";
-import { ownReason, stockReasons, incomeReason, hasYutai } from "../lib/fit";
+import { ownReason, stockReasons, incomeReason, sizeReason, hasYutai } from "../lib/fit";
 import { buildUp, isBuildingUp } from "../lib/trend";
 
 const HORIZON_LABEL = Object.fromEntries(HORIZONS.map((h) => [h.id, h.label]));
@@ -96,7 +96,10 @@ export default function Home() {
     const keep = [], off = [];
     for (const g of groupUp(mainList)) {
       const reason =
-        ownReason(entryOf(g)) || stockOff[secKey(g[0])] || incomeReason(quotes[g[0].secCode]?.yieldPct, g[0].yutai);
+        ownReason(entryOf(g)) ||
+        stockOff[secKey(g[0])] ||
+        incomeReason(quotes[g[0].secCode]?.yieldPct, g[0].yutai) ||
+        sizeReason(quotes[g[0].secCode]);
       if (reason) off.push({ g, reason });
       else if (yutaiOnly && !hasYutai(g[0].yutai)) continue;
       else if (!buying || isBuildingUp(buildUp(g, holdings))) keep.push(g);
@@ -211,7 +214,7 @@ export default function Home() {
 
       {offGroups.length > 0 && (
         <details className="fixes">
-          <summary>目的外 {offGroups.length}件<span className="fixes-note">（低配当で優待なし・TOB・親会社級の大株主・持ち合いなど）</span></summary>
+          <summary>目的外 {offGroups.length}件<span className="fixes-note">（低配当で優待なし・小型株・流動性不足・TOB・親会社級の大株主・持ち合いなど）</span></summary>
           <div className="fix-list">
             {offGroups.map(({ g, reason }) => (
               <div key={g[0].docId} className="fix-row">
