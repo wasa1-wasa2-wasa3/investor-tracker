@@ -8,7 +8,7 @@ const fmt = (v, d = 1, unit = "") => (v == null ? "—" : `${v.toFixed(d)}${unit
 export default function Picks() {
   const [data, setData] = useState(null);
   const [open, setOpen] = useState(true);
-  const [yutaiOnly, setYutaiOnly] = useState(false); // 「優待ありのみ」：10選に関係なく優待あり銘柄を全件
+  const [yutaiOnly, setYutaiOnly] = useState(false); // 「優待ありのみ」：20選に関係なく優待あり銘柄を全件
 
   // スマホでは一覧を先に見られるよう、最初は閉じておく
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Picks() {
     <aside className="picks">
       <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary>
-          <span className="picks-title">{yutaiOnly ? `優待あり銘柄（${list.length}件）` : "有望銘柄10選"}</span>
+          <span className="picks-title">{yutaiOnly ? `優待あり銘柄（${list.length}件）` : "有望銘柄20選"}</span>
           <span className="picks-sub">大物購入 × 中大型 × 配当・優待（半年以内）{!open && "　▼タップで開く"}</span>
         </summary>
 
