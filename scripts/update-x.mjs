@@ -124,11 +124,13 @@ for (let i = 0; i < accounts.length; i += 20) {
   found.push(...posts);
 }
 
-const byUrl = new Map(store.posts.map((p) => [p.url, p]));
+// 1つの投稿で複数の銘柄に触れることがあるので、投稿URL×銘柄で重複を除く
+const keyOf = (p) => `${p.url}|${p.secCode || p.name}`;
+const byUrl = new Map(store.posts.map((p) => [keyOf(p), p]));
 let added = 0;
 for (const p of found) {
-  if (!byUrl.has(p.url)) added++;
-  byUrl.set(p.url, { ...byUrl.get(p.url), ...p });
+  if (!byUrl.has(keyOf(p))) added++;
+  byUrl.set(keyOf(p), { ...byUrl.get(keyOf(p)), ...p });
 }
 const cutoff = ymd(daysAgo(KEEP_DAYS));
 const posts = [...byUrl.values()]

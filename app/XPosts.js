@@ -13,7 +13,7 @@ export default function XPosts() {
       {X_POSTS.length === 0 && <div className="picks-empty">まだ言及はありません</div>}
       <div className="fix-list">
         {X_POSTS.map((p) => (
-          <div key={p.url} className="fix-row xpost">
+          <div key={`${p.url}|${p.secCode || p.name}`} className="fix-row xpost">
             <span className="fix-date">{p.postedAt?.slice(5) || "—"}</span>
             <span className="fix-who">{p.label}</span>
             <span className={`xstance ${p.stance}`}>{STANCE[p.stance]}</span>
