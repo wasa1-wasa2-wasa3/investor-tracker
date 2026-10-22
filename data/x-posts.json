@@ -1,16 +1,6 @@
 {
- "updatedAt": "2026-10-22T15:28:39.044Z",
+ "updatedAt": "2026-10-22T15:35:49.616Z",
  "posts": [
-  {
-   "handle": "kabu_st0ck",
-   "label": "ちょる子",
-   "postedAt": "2026-10-22",
-   "url": "https://x.com/kabu_st0ck/status/2113029102496268545",
-   "secCode": "7974",
-   "name": "任天堂",
-   "stance": "mention",
-   "summary": "尻文字ネタへの返信で任天堂と投稿"
-  },
   {
    "handle": "57jbgw2",
    "label": "カテキン",
@@ -19,7 +9,7 @@
    "secCode": "2484",
    "name": "出前館",
    "stance": "mention",
-   "summary": "以前保有していたと投稿"
+   "summary": "以前保有していたと記載"
   },
   {
    "handle": "kabu_st0ck",
@@ -34,12 +24,112 @@
   {
    "handle": "57jbgw2",
    "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "8366",
+   "name": "滋賀銀行",
+   "stance": "sell",
+   "summary": "銀行株と滋賀銀を少し前に売却、約6倍"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "3563",
+   "name": "スシロー",
+   "stance": "hold",
+   "summary": "5倍になり日本株資産の8割を占める保有"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "7974",
+   "name": "任天堂",
+   "stance": "hold",
+   "summary": "保有として6900円と併記"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "4443",
+   "name": "Sansan",
+   "stance": "hold",
+   "summary": "保有として2046円と併記"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "8012",
+   "name": "長瀬産業",
+   "stance": "hold",
+   "summary": "保有として1090円と併記"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "4502",
+   "name": "武田薬品工業",
+   "stance": "hold",
+   "summary": "保有として6100円と併記"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-21",
+   "url": "https://x.com/kabu_st0ck/status/2113029102496268545",
+   "secCode": "7974",
+   "name": "任天堂",
+   "stance": "mention",
+   "summary": "尻文字ネタへの返信で任天堂と投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-20",
+   "url": "https://x.com/57jbgw2/status/2112344013378662502",
+   "secCode": null,
+   "name": "キオクシア",
+   "stance": "mention",
+   "summary": "NAND世界シェア比較でキオクシアに言及"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-20",
+   "url": "https://x.com/kabu_st0ck/status/2112482338525659329",
+   "secCode": "3999",
+   "name": "akippa",
+   "stance": "mention",
+   "summary": "akippa決算説明会登壇予定を告知"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
    "postedAt": "2026-10-19",
    "url": "https://x.com/57jbgw2/status/2112073911211118826",
    "secCode": "3563",
    "name": "スシロー",
    "stance": "hold",
-   "summary": "保有中、押し目買いの他人がうざいと投稿"
+   "summary": "持株ながら暴落を期待すると投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-19",
+   "url": "https://x.com/57jbgw2/status/2112105379865993476",
+   "secCode": "3563",
+   "name": "スシロー",
+   "stance": "hold",
+   "summary": "買値1200円以下で5倍、あと5年保有"
   },
   {
    "handle": "57jbgw2",
