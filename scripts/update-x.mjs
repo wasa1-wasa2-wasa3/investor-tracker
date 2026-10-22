@@ -84,8 +84,11 @@ function parsePosts(text) {
   }
 }
 
-const clean = (p) => {
-  const handle = String(p.handle || "").replace(/^@/, "");
+const clean = (p, batch) => {
+  // ハンドルが抜けていたり表記ゆれがあるときは、URLから補う。1人だけ見ているならその人
+  const fromUrl = String(p.url || "").match(/^https:\/\/(?:x|twitter)\.com\/([^/]+)\/status\//)?.[1];
+  let handle = String(p.handle || "").replace(/^@/, "");
+  if (!labelOf[handle.toLowerCase()]) handle = fromUrl && fromUrl !== "i" ? fromUrl : batch.length === 1 ? batch[0] : handle;
   const url = typeof p.url === "string" && /^https:\/\/(x|twitter)\.com\//.test(p.url) ? p.url : null;
   if (!handle || !url || !labelOf[handle.toLowerCase()]) return null; // 監視対象以外・URLなしは捨てる
   const code = typeof p.secCode === "string" && /^[0-9][0-9A-Z]{3}$/.test(p.secCode) ? p.secCode : null;
@@ -108,12 +111,16 @@ if (!accounts.length) {
 
 console.log(`X投稿: ${accounts.length} アカウント、${from} 以降を確認します`);
 const found = [];
+const debug = []; // 動作確認用：Grokの返答をそのまま残す（data/x-debug.json）
 for (let i = 0; i < accounts.length; i += 20) {
   const handles = accounts.slice(i, i + 20).map((a) => a.handle);
   const j = await callGrok(handles);
-  const posts = parsePosts(outputText(j)).map(clean).filter(Boolean);
+  const text = outputText(j);
+  const raw = parsePosts(text);
+  const posts = raw.map((p) => clean(p, handles)).filter(Boolean);
   const u = j.usage?.server_side_tool_usage_details;
-  console.log(`  ${handles.join(",")}: ${posts.length} 件${u ? `（検索${u.x_search_calls ?? "?"}回）` : ""}`);
+  console.log(`  ${handles.join(",")}: ${posts.length} 件（Grokの返答 ${raw.length} 件）${u ? `（検索${u.x_search_calls ?? "?"}回）` : ""}`);
+  debug.push({ handles, model: j.model, status: j.status, usage: j.usage, raw: raw.length, kept: posts.length, text: text.slice(0, 3000), error: j.error });
   found.push(...posts);
 }
 
@@ -129,4 +136,5 @@ const posts = [...byUrl.values()]
   .sort((a, b) => (b.postedAt || "").localeCompare(a.postedAt || ""));
 
 fs.writeFileSync(file("x-posts.json"), JSON.stringify({ updatedAt: new Date().toISOString(), posts }, null, 1) + "\n");
+fs.writeFileSync(file("x-debug.json"), JSON.stringify({ at: new Date().toISOString(), from, to, debug }, null, 1) + "\n");
 console.log(`新規 ${added} 件、合計 ${posts.length} 件`);
