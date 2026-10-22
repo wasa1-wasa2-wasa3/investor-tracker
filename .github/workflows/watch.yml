@@ -1,0 +1,52 @@
+name: 大量保有の新着通知
+
+on:
+  schedule:
+    # 平日 9:07〜19:52（日本時間）に15分おき。混雑する毎時0分を避けている
+    # GitHubの混み具合で数分〜十数分遅れることがある
+    - cron: "7,22,37,52 0-10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "1 にすると通知せずにログに出すだけ"
+        required: false
+        default: ""
+
+concurrency:
+  group: watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: 依存パッケージを入れる
+        run: npm ci --no-audit --no-fund
+      # 通知済みの書類IDをキャッシュで持ち越す（リポジトリにはコミットしない＝Vercelの再デプロイが走らない）
+      - name: 通知済みリストを復元
+        uses: actions/cache/restore@v4
+        with:
+          path: .watch-state
+          key: watch-state-${{ github.run_id }}
+          restore-keys: watch-state-
+      - name: 新着をチェックして通知
+        env:
+          EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          APP_URL: ${{ vars.APP_URL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: node scripts/watch-new.mjs
+      - name: 通知済みリストを保存
+        if: always() && hashFiles('.watch-state/seen.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .watch-state
+          key: watch-state-${{ github.run_id }}

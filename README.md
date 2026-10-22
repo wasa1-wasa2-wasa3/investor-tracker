@@ -50,6 +50,21 @@ xAI（Grok）APIの X Search で、監視アカウントの投稿から日本株
 - 費用の目安：X Searchは1,000回で5ドル程度＋トークン代。1日1回なら月に数十円〜数百円
 - キー未設定のあいだはスキップされ、画面にも出ない
 
+## 大量保有の新着通知（15分おき）
+
+GitHub Actions が平日9時〜20時ごろに15分おきにEDINETを見て、ウォッチ対象（`data/watchlist.json`）の
+大量保有報告書（新規・変更）が新しく出たら、DiscordかLINEに通知する。X投稿の下書きも付く（`.github/workflows/watch.yml`）。
+
+- 準備：GitHubの Settings → Secrets and variables → Actions に、通知先をどちらか登録
+  - Discord：`DISCORD_WEBHOOK_URL`（チャンネルの設定 → 連携サービス → ウェブフック → URLをコピー）
+  - LINE：`LINE_CHANNEL_ACCESS_TOKEN` と `LINE_USER_ID`（LINE公式アカウントのMessaging API。LINE Notifyは終了済み）
+  - 任意：Variables に `APP_URL`（VercelのURL）を入れると通知にリンクが付く
+- 初回：その日すでに出ている分は通知せず「通知済み」にするだけ。次の回から新着だけ届く
+- 試す：Actions タブの「大量保有の新着通知」→「Run workflow」で dry_run に `1` を入れると、通知せずにログに出す
+- 通知済みの書類IDは Actions のキャッシュに持ち越す（リポジトリにはコミットしないので、Vercelの再デプロイは走らない）
+- GitHubの混み具合で数分〜十数分遅れることがある。訂正報告書（360）は通知しない
+- 実行回数は月に約1,000回（1回1分弱）。非公開リポジトリだと無料枠（月2,000分）の半分ほどを使う
+
 ## ファイル
 
 | ファイル | 役割 |
@@ -57,6 +72,7 @@ xAI（Grok）APIの X Search で、監視アカウントの投稿から日本株
 | `data/watchlist.json` | ウォッチ対象・分類・提出者名に含まれる文字列。**ここを育てる** |
 | `data/history.json` | 自動で貯まる過去の報告書（手で編集しない） |
 | `scripts/update-history.mjs` | 履歴を集めるスクリプト |
+| `scripts/watch-new.mjs` | 当日の新着を見て通知するスクリプト |
 | `lib/edinet.js` | 書類一覧APIの取得と照合 |
 | `app/api/filings` | `GET /api/filings?days=7&all=1` |
 | `app/api/pdf/[docId]` | PDFをサーバー経由で返す（キーを隠すため） |
@@ -69,5 +85,5 @@ xAI（Grok）APIの X Search で、監視アカウントの投稿から日本株
 
 ## 次の段階
 
-- Vercel Cronで1日数回チェックし、新着だけLINEやメールに通知
+- 通知にGrokで「Xでの話題度（イナゴ度）」を付ける
 - 手応えがあれば、マルチバガーくんに「大物の動き」タブとして統合し、銘柄ごとにスコア表示
