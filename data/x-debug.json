@@ -1,32 +1,33 @@
 {
- "at": "2026-10-22T15:22:30.067Z",
+ "at": "2026-10-22T15:28:39.044Z",
  "from": "2026-10-08",
  "to": "2026-10-23",
  "debug": [
   {
    "handles": [
-    "cissan_9984"
+    "kabu_st0ck",
+    "57jbgw2"
    ],
    "model": "grok-4.7",
    "status": "completed",
    "usage": {
-    "input_tokens": 13389,
+    "input_tokens": 685433,
     "input_tokens_details": {
-     "cached_tokens": 6400
+     "cached_tokens": 598528
     },
-    "output_tokens": 609,
+    "output_tokens": 22829,
     "output_tokens_details": {
-     "reasoning_tokens": 458
+     "reasoning_tokens": 17845
     },
-    "total_tokens": 13998,
+    "total_tokens": 708262,
     "num_sources_used": 0,
-    "num_server_side_tools_used": 6,
-    "cost_in_usd_ticks": 208320000,
+    "num_server_side_tools_used": 45,
+    "cost_in_usd_ticks": 22650960000,
     "server_side_tool_usage_details": {
      "web_search_calls": 0,
-     "x_search_calls": 6,
-     "x_posts_fetched": 0,
-     "x_users_fetched": 0,
+     "x_search_calls": 45,
+     "x_posts_fetched": 205,
+     "x_users_fetched": 2,
      "code_interpreter_calls": 0,
      "file_search_calls": 0,
      "mcp_calls": 0,
@@ -34,13 +35,13 @@
      "image_generation_calls": 0
     },
     "context_details": {
-     "input_tokens": 3633,
-     "output_tokens": 62
+     "input_tokens": 88847,
+     "output_tokens": 5463
     }
    },
-   "raw": 0,
-   "kept": 0,
-   "text": "[]",
+   "raw": 34,
+   "kept": 34,
+   "text": "[{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-09\",\"url\":\"https://x.com/kabu_st0ck/status/2108336097147375906\",\"secCode\":\"7203\",\"name\":\"トヨタ自動車\",\"stance\":\"mention\",\"summary\":\"岐阜氏はトヨタなど優良株しか買わないと指摘\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-09\",\"url\":\"https://x.com/kabu_st0ck/status/2108336097147375906\",\"secCode\":\"9501\",\"name\":\"東京電力HD\",\"stance\":\"mention\",\"summary\":\"岐阜氏は東電など優良銘柄しか買わないと指摘\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-09\",\"url\":\"https://x.com/kabu_st0ck/status/2108336097147375906\",\"secCode\":\"1605\",\"name\":\"INPEX\",\"stance\":\"mention\",\"summary\":\"岐阜氏はINPEXなど優良銘柄しか買わないと指摘\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-09\",\"url\":\"https://x.com/kabu_st0ck/status/2108340419524510120\",\"secCode\":\"6324\",\"name\":\"ハーモニック・ドライブ・システムズ\",\"stance\":\"mention\",\"summary\":\"ハーモニックは買うのが難しい銘柄とコメント\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-09\",\"url\":\"https://x.com/kabu_st0ck/status/2108465322592444728\",\"secCode\":\"9984\",\"name\":\"ソフトバンクグループ\",\"stance\":\"mention\",\"summary\":\"最大16兆円の資金調達検討との日経を共有\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-11\",\"url\":\"https://x.com/kabu_st0ck/status/2109062172395671850\",\"secCode\":\"7203\",\"name\":\"トヨタ自動車\",\"stance\":\"mention\",\"summary\":\"トヨタ株売却の理由を語る動画を共有\"},{\"handle\":\"57jbgw2\",\"postedAt\":\"2026-10-12\",\"url\":\"https://x.com/57jbgw2/status/2109571248355446946\",\"secCode\":\"7777\",\"name\":\"3Dマトリックス\",\"stance\":\"sell\",\"summary\":\"決算トレードで儲けた金で宿を買ったと報告\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-12\",\"url\":\"https://x.com/kabu_st0ck/status/2109559428718711140\",\"secCode\":\"6920\",\"name\":\"レーザーテック\",\"stance\":\"mention\",\"summary\":\"受注は悪くならないとの社長発言記事を共有\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-13\",\"url\":\"https://x.com/kabu_st0ck/status/2109756522939167172\",\"secCode\":\"6146\",\"name\":\"ディスコ\",\"stance\":\"mention\",\"summary\":\"年収が倍増したとの日経記事を共有\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-13\",\"url\":\"https://x.com/kabu_st0ck/status/2109779763435020596\",\"secCode\":\"285A\",\"name\":\"キオクシア\",\"stance\":\"mention\",\"summary\":\"キオクシア暴落と休みを投稿\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-13\",\"url\":\"https://x.com/kabu_st0ck/status/2109807397271462331\",\"secCode\":\"285A\",\"name\":\"キオクシア\",\"stance\":\"mention\",\"summary\":\"キオクシアの下げが止まらないと投稿\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-15\",\"url\":\"https://x.com/kabu_st0ck/status/2110501485092196589\",\"secCode\":\"285A\",\"name\":\"キオクシア\",\"stance\":\"mention\",\"summary\":\"キオクシアが下離れの二本黒と目視\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-15\",\"url\":\"https://x.com/kabu_st0ck/status/2110501485092196589\",\"secCode\":\"9984\",\"name\":\"ソフトバンクグループ\",\"stance\":\"mention\",\"summary\":\"SBGが下離れの二本黒と目視\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-15\",\"url\":\"https://x.com/kabu_st0ck/status/2110506394478924189\",\"secCode\":\"8035\",\"name\":\"東京エレクトロン\",\"stance\":\"mention\",\"summary\":\"エレクが上がるよう祈ると返信\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-15\",\"url\":\"https://x.com/kabu_st0ck/status/2110506653506470096\",\"secCode\":\"6857\",\"name\":\"アドバンテスト\",\"stance\":\"mention\",\"summary\":\"アドバンは強いとコメント\"},{\"handle\":\"kabu_st0ck\",\"postedAt\":\"2026-10-15\",\"url\":\"https://x.com/kabu_st0ck/status/2110506653506470096\",\"secCode\":\"8035\",\"nam",
    "error": null
   }
  ]

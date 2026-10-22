@@ -1,4 +1,225 @@
 {
- "updatedAt": "2026-10-22T15:22:30.066Z",
- "posts": []
+ "updatedAt": "2026-10-22T15:28:39.044Z",
+ "posts": [
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/kabu_st0ck/status/2113029102496268545",
+   "secCode": "7974",
+   "name": "任天堂",
+   "stance": "mention",
+   "summary": "尻文字ネタへの返信で任天堂と投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/57jbgw2/status/2113091145693827535",
+   "secCode": "2484",
+   "name": "出前館",
+   "stance": "mention",
+   "summary": "以前保有していたと投稿"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/kabu_st0ck/status/2113265062882468275",
+   "secCode": "6146",
+   "name": "ディスコ",
+   "stance": "mention",
+   "summary": "ディスコが上がっていると投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-19",
+   "url": "https://x.com/57jbgw2/status/2112073911211118826",
+   "secCode": "3563",
+   "name": "スシロー",
+   "stance": "hold",
+   "summary": "保有中、押し目買いの他人がうざいと投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-17",
+   "url": "https://x.com/57jbgw2/status/2111209953847603523",
+   "secCode": "285A",
+   "name": "キオクシア",
+   "stance": "mention",
+   "summary": "分割前は10万円超だったと回想"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110501485092196589",
+   "secCode": "9984",
+   "name": "ソフトバンクグループ",
+   "stance": "mention",
+   "summary": "SBGが下離れの二本黒と目視"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110506394478924189",
+   "secCode": "8035",
+   "name": "東京エレクトロン",
+   "stance": "mention",
+   "summary": "エレクが上がるよう祈ると返信"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110506653506470096",
+   "secCode": "285A",
+   "name": "キオクシア",
+   "stance": "sell",
+   "summary": "10%安で手仕舞い、再エントリー希望"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110529246087332038",
+   "secCode": "6857",
+   "name": "アドバンテスト",
+   "stance": "mention",
+   "summary": "アドバンは厳しい、水星逆行後に再検討"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110533241954599084",
+   "secCode": "9984",
+   "name": "ソフトバンクグループ",
+   "stance": "mention",
+   "summary": "ポジ画面を見てソフバンはと質問"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/57jbgw2/status/2110540640224461110",
+   "secCode": "3563",
+   "name": "スシロー",
+   "stance": "mention",
+   "summary": "サイゼリヤはスシローと同じ構図と指摘"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110734096607658387",
+   "secCode": "9984",
+   "name": "ソフトバンクグループ",
+   "stance": "mention",
+   "summary": "信用リスクに弱い日本株としてSBGに言及"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-15",
+   "url": "https://x.com/kabu_st0ck/status/2110740407160365069",
+   "secCode": "6857",
+   "name": "アドバンテスト",
+   "stance": "sell",
+   "summary": "下げで売却し買い直してすぐ再売却"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-13",
+   "url": "https://x.com/kabu_st0ck/status/2109756522939167172",
+   "secCode": "6146",
+   "name": "ディスコ",
+   "stance": "mention",
+   "summary": "年収が倍増したとの日経記事を共有"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-13",
+   "url": "https://x.com/kabu_st0ck/status/2109779763435020596",
+   "secCode": "285A",
+   "name": "キオクシア",
+   "stance": "mention",
+   "summary": "キオクシア暴落と休みを投稿"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-13",
+   "url": "https://x.com/kabu_st0ck/status/2109807397271462331",
+   "secCode": "285A",
+   "name": "キオクシア",
+   "stance": "mention",
+   "summary": "キオクシアの下げが止まらないと投稿"
+  },
+  {
+   "handle": "57jbgw2",
+   "label": "カテキン",
+   "postedAt": "2026-10-12",
+   "url": "https://x.com/57jbgw2/status/2109571248355446946",
+   "secCode": "7777",
+   "name": "3Dマトリックス",
+   "stance": "sell",
+   "summary": "決算トレードで儲けた金で宿を買ったと報告"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-12",
+   "url": "https://x.com/kabu_st0ck/status/2109559428718711140",
+   "secCode": "6920",
+   "name": "レーザーテック",
+   "stance": "mention",
+   "summary": "受注は悪くならないとの社長発言記事を共有"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-11",
+   "url": "https://x.com/kabu_st0ck/status/2109062172395671850",
+   "secCode": "7203",
+   "name": "トヨタ自動車",
+   "stance": "mention",
+   "summary": "トヨタ株売却の理由を語る動画を共有"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-09",
+   "url": "https://x.com/kabu_st0ck/status/2108336097147375906",
+   "secCode": "1605",
+   "name": "INPEX",
+   "stance": "mention",
+   "summary": "岐阜氏はINPEXなど優良銘柄しか買わないと指摘"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-09",
+   "url": "https://x.com/kabu_st0ck/status/2108340419524510120",
+   "secCode": "6324",
+   "name": "ハーモニック・ドライブ・システムズ",
+   "stance": "mention",
+   "summary": "ハーモニックは買うのが難しい銘柄とコメント"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-09",
+   "url": "https://x.com/kabu_st0ck/status/2108465322592444728",
+   "secCode": "9984",
+   "name": "ソフトバンクグループ",
+   "stance": "mention",
+   "summary": "最大16兆円の資金調達検討との日経を共有"
+  }
+ ]
 }
