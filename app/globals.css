@@ -145,3 +145,11 @@ a { color: var(--chg); }
 .yutai-toggle.on { background: var(--new); color: #fff; font-weight: 700; }
 .size-tag { margin-left: 4px; font-size: 11px; padding: 0 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
 .chase { font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--new); color: var(--new); }
+.xposts { margin: 0 0 16px; border-style: solid; }
+.xpost .fix-target a { margin-left: 0; }
+.xposts > summary { cursor: pointer; font-weight: 700; }
+.xpost { flex-wrap: wrap; }
+.xstance { font-size: 11px; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+.xstance.buy { border-color: var(--new); color: var(--new); font-weight: 700; }
+.xsummary { flex-basis: 100%; color: var(--muted); font-size: 12px; }
+.xbadge { font-size: 11px; padding: 1px 7px; border-radius: 4px; background: var(--ink); color: var(--card); text-decoration: none; }

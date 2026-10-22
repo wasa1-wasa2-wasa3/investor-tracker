@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { X_BY_CODE, STANCE } from "../lib/xposts";
 import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
@@ -65,6 +66,12 @@ export default function Picks() {
                   <span className="buildup" title={`${p.buildingUp.who}が続けて買い増し`}>
                     買い増し中 {p.buildingUp.from === 0 ? "新規" : `${p.buildingUp.from.toFixed(1)}%`}→{p.buildingUp.to.toFixed(1)}%
                   </span>
+                )}
+                {X_BY_CODE[p.secCode] && (
+                  <a className="xbadge" href={X_BY_CODE[p.secCode][0].url} target="_blank" rel="noreferrer"
+                    title={X_BY_CODE[p.secCode].map((x) => `${x.label}: ${x.summary}`).join("\n")}>
+                    X {X_BY_CODE[p.secCode][0].label}が{STANCE[X_BY_CODE[p.secCode][0].stance]}
+                  </a>
                 )}
                 {p.investors.map((v) => (
                   <span key={v.id} className={`htag ${v.horizon}`}>{v.label}</span>
