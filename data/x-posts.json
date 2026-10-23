@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-23T16:11:39.328Z",
+ "updatedAt": "2026-10-23T16:36:40.621Z",
  "posts": [
   {
    "handle": "kabu_st0ck",
@@ -32,14 +32,47 @@
    "summary": "11/10決算説明会とIR Meetupに登壇"
   },
   {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113421935539626380",
+   "secCode": "1928",
+   "name": "積水ハウス",
+   "stance": "mention",
+   "summary": "積水ハウスの株価が復活したと投稿",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113502850500460990",
+   "secCode": "1928",
+   "name": "積水ハウス",
+   "stance": "mention",
+   "summary": "積水ハウスのCMの話題に返信",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113502905764655105",
+   "secCode": "2914",
+   "name": "JT",
+   "stance": "mention",
+   "summary": "「JTしゅごい」への返信でJTに喜ぶ",
+   "source": "grok-bot"
+  },
+  {
    "handle": "57jbgw2",
    "label": "カテキン",
    "postedAt": "2026-10-22",
    "url": "https://x.com/57jbgw2/status/2113091145693827535",
    "secCode": "2484",
    "name": "出前館",
-   "stance": "mention",
-   "summary": "過去に持っていたと記載",
+   "stance": "hold",
+   "summary": "出前館も保有していたと言及",
    "source": "grok-bot"
   },
   {
@@ -60,7 +93,8 @@
    "secCode": "8366",
    "name": "滋賀銀行",
    "stance": "sell",
-   "summary": "少し前に売却、6倍弱になった"
+   "summary": "滋賀銀行を少し前に売却、約6倍に",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -68,9 +102,10 @@
    "postedAt": "2026-10-22",
    "url": "https://x.com/57jbgw2/status/2113091145693827535",
    "secCode": "3563",
-   "name": "スシロー",
+   "name": "FOOD & LIFE COMPANIES（スシロー）",
    "stance": "hold",
-   "summary": "5倍で日本株資産の80%を保有"
+   "summary": "スシローを保有、5倍で日本株資産の8割",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -80,7 +115,8 @@
    "secCode": "7974",
    "name": "任天堂",
    "stance": "hold",
-   "summary": "保有。6900円と記載"
+   "summary": "任天堂を6900円で保有",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -90,7 +126,8 @@
    "secCode": "4443",
    "name": "Sansan",
    "stance": "hold",
-   "summary": "保有。2046円と記載"
+   "summary": "Sansanを2046円で保有",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -100,7 +137,8 @@
    "secCode": "8012",
    "name": "長瀬産業",
    "stance": "hold",
-   "summary": "保有。1090円と記載"
+   "summary": "長瀬産業を1090円で保有",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -110,7 +148,8 @@
    "secCode": "4502",
    "name": "武田薬品工業",
    "stance": "hold",
-   "summary": "保有。6100円と記載"
+   "summary": "武田薬品を6100円で保有",
+   "source": "grok-bot"
   },
   {
    "handle": "kabu_st0ck",
@@ -120,17 +159,30 @@
    "secCode": "6323",
    "name": "ローツェ",
    "stance": "mention",
-   "summary": "決算は跨がない方がよさそう"
+   "summary": "ローツェは決算を跨がない方が良さそうと所感",
+   "source": "grok-bot"
   },
   {
    "handle": "kabu_st0ck",
    "label": "ちょる子",
-   "postedAt": "2026-10-21",
+   "postedAt": "2026-10-22",
    "url": "https://x.com/kabu_st0ck/status/2113029102496268545",
    "secCode": "7974",
    "name": "任天堂",
    "stance": "mention",
-   "summary": "尻文字ネタへの返信で社名のみ"
+   "summary": "尻文字ネタへの返信で「任天堂」と回答",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/kabu_st0ck/status/2113039300757737855",
+   "secCode": "3672",
+   "name": "オルトプラス",
+   "stance": "mention",
+   "summary": "「娘のオルトプラス」と冗談交じりに言及",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -168,9 +220,10 @@
    "postedAt": "2026-10-19",
    "url": "https://x.com/57jbgw2/status/2112073911211118826",
    "secCode": "3563",
-   "name": "スシロー",
+   "name": "FOOD & LIFE COMPANIES（スシロー）",
    "stance": "hold",
-   "summary": "持株ながら暴落を期待すると投稿"
+   "summary": "持株のスシロー、もう一度の暴落を期待",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -178,9 +231,87 @@
    "postedAt": "2026-10-19",
    "url": "https://x.com/57jbgw2/status/2112105379865993476",
    "secCode": "3563",
-   "name": "スシロー",
+   "name": "FOOD & LIFE COMPANIES（スシロー）",
    "stance": "hold",
-   "summary": "買値1200円以下で5倍、あと5年保有"
+   "summary": "買値1200円以下で5倍、あと5年保有継続",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-19",
+   "url": "https://x.com/kabu_st0ck/status/2112079624482308496",
+   "secCode": "3091",
+   "name": "ブロンコビリー",
+   "stance": "mention",
+   "summary": "優待株ブロンコビリーのチャートに好感",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-19",
+   "url": "https://x.com/kabu_st0ck/status/2111979924735365452",
+   "secCode": "7552",
+   "name": "ハピネット",
+   "stance": "mention",
+   "summary": "ハピネットの株価が強いと言及",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-19",
+   "url": "https://x.com/kabu_st0ck/status/2111979331769729037",
+   "secCode": "9735",
+   "name": "セコム",
+   "stance": "mention",
+   "summary": "セコムは良いと評価、防犯需要に期待",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-18",
+   "url": "https://x.com/kabu_st0ck/status/2111736057758875758",
+   "secCode": "6857",
+   "name": "アドバンテスト",
+   "stance": "mention",
+   "summary": "アドバンテスト大底狙いの話に「アドバンテス子」と返信",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-18",
+   "url": "https://x.com/kabu_st0ck/status/2111640940951879965",
+   "secCode": "4502",
+   "name": "武田薬品工業",
+   "stance": "mention",
+   "summary": "ディフェンシブ上げの話で武田に期待",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-18",
+   "url": "https://x.com/kabu_st0ck/status/2111640940951879965",
+   "secCode": "2914",
+   "name": "JT",
+   "stance": "mention",
+   "summary": "ディフェンシブ上げの話でJTに期待",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-18",
+   "url": "https://x.com/kabu_st0ck/status/2111591321756721241",
+   "secCode": "3486",
+   "name": "グローバル・リンク・マネジメント",
+   "stance": "mention",
+   "summary": "同社の金社長の番組出演に言及",
+   "source": "grok-bot"
   },
   {
    "handle": "57jbgw2",
@@ -188,9 +319,54 @@
    "postedAt": "2026-10-17",
    "url": "https://x.com/57jbgw2/status/2111209953847603523",
    "secCode": "285A",
-   "name": "キオクシア",
+   "name": "キオクシアホールディングス",
    "stance": "mention",
-   "summary": "分割前は10万円超だったと回想"
+   "summary": "中国メモリ台頭を指摘、キオクシアの過熱に言及",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-17",
+   "url": "https://x.com/kabu_st0ck/status/2111245530491920860",
+   "secCode": "4502",
+   "name": "武田薬品工業",
+   "stance": "mention",
+   "summary": "武田は人的資本が潤沢で羨ましいと言及",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-17",
+   "url": "https://x.com/kabu_st0ck/status/2111231038378869140",
+   "secCode": "215A",
+   "name": "タイミー",
+   "stance": "mention",
+   "summary": "タイミーも同じ類の銘柄かもと言及",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-17",
+   "url": "https://x.com/kabu_st0ck/status/2111230312160362519",
+   "secCode": "9735",
+   "name": "セコム",
+   "stance": "mention",
+   "summary": "セキュリティ需要の話で「SECOMマストバイ」",
+   "source": "grok-bot"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-17",
+   "url": "https://x.com/kabu_st0ck/status/2111228239310156251",
+   "secCode": "4502",
+   "name": "武田薬品工業",
+   "stance": "mention",
+   "summary": "武田は積み立てておけば良い会社と言及",
+   "source": "grok-bot"
   },
   {
    "handle": "kabu_st0ck",
