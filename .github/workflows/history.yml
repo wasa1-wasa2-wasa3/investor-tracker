@@ -53,7 +53,10 @@ jobs:
         continue-on-error: true
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          X_SOURCE: ${{ vars.X_SOURCE }}
         run: |
+          # X投稿は Grok Bot（Issue経由・x-import.yml）で取り込む。APIで取るときはリポジトリ変数 X_SOURCE=api
+          if [ "$X_SOURCE" != "api" ]; then echo "X投稿はGrok Bot経由のためスキップ"; exit 0; fi
           if [ -z "$XAI_API_KEY" ]; then echo "XAI_API_KEY 未設定のためスキップ"; exit 0; fi
           node scripts/update-x.mjs
       - name: 変更があればコミット

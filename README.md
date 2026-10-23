@@ -39,16 +39,28 @@ EDINETは1日分ずつしか取れないので、GitHub Actions が平日19時�
   - 履歴の更新と同じGitHub Actionsで実行。初回は有報を探すため過去400日分の書類一覧を見る（10分前後）
   - 有報は年1回なので、優待の新設・廃止の反映は次の有報まで遅れることがある
 
-## 大物のX投稿（Grok）
+## 大物のX投稿（Grok Bot）
 
-xAI（Grok）APIの X Search で、監視アカウントの投稿から日本株の銘柄への言及を拾い、`data/x-posts.json` に貯める。
-20選の採点には使わず、一覧の上の「Xの大物」と、20選の銘柄に付く「X ○○が買い」バッジで参考表示するだけ。
+Grok Bot（SuperGrok / Cursor Pro 以上で使えるxAIのエージェント）に、監視アカウントの投稿から銘柄の言及をまとめてもらい、
+GitHub の Issue に投稿してもらう。Issue が作られると `.github/workflows/x-import.yml` が本文の JSON を `data/x-posts.json` に取り込み、
+結果を返信して Issue を閉じる。20選の採点には使わず、「Xの大物」と「X ○○が買い」バッジで参考表示するだけ。
 
-- 準備：console.x.ai でAPIキーを発行し、GitHubの Actions シークレットに `XAI_API_KEY` を登録
-- 監視するアカウント：`data/x-accounts.json` に `@` なしのハンドル名で足す（1回の検索で20件まで、超えたら自動で分割）
-- 実行：「履歴と優待の更新」と同じGitHub Actionsで平日1回。初回は14日分、以降は3日分。90日より古い投稿は消える
-- 費用の目安：X Searchは1,000回で5ドル程度＋トークン代。1日1回なら月に数十円〜数百円
-- キー未設定のあいだはスキップされ、画面にも出ない
+- 取り込む条件：タイトルが `[X投稿]` で始まる／投稿者がリポジトリの持ち主（別のアカウントを許すならリポジトリ変数 `X_IMPORT_AUTHORS` にカンマ区切り）
+- 監視対象（`data/x-accounts.json`）以外のアカウントや、x.com の投稿URLでないものは捨てる
+- 本文はデータとしてだけ読み、実行しない
+
+### Grok Bot への頼み方（例）
+
+> 毎週土曜の朝に、X の @kabu_st0ck と @57jbgw2 の直近7日間の投稿から、日本の上場株（個別銘柄）に触れている投稿を全部探してください。
+> 見つけたら GitHub の wasa1-wasa2-wasa3/investor-tracker に Issue を作ってください。
+> タイトルは「[X投稿] YYYY-MM-DD」、本文は次の形の JSON 配列だけを ```json で囲んで書いてください（推測で投稿を作らないこと）。
+> `[{"handle":"@なし","postedAt":"YYYY-MM-DD","url":"投稿のURL","secCode":"4桁の証券コード（不明ならnull）","name":"銘柄名","stance":"buy|sell|hold|mention","summary":"日本語40字以内"}]`
+> stance は 買った・買い増し=buy、売った・利確・損切り=sell、保有継続=hold、それ以外=mention。
+
+### xAI API で取る場合（従量課金）
+
+`scripts/update-x.mjs` が API の x_search で同じことをする。費用がかかる（2人で1回1〜2ドル程度）ので普段は止めてある。
+使うときはリポジトリ変数 `X_SOURCE=api` とシークレット `XAI_API_KEY` を設定する。
 
 ## ファイル
 
