@@ -1,6 +1,36 @@
 {
- "updatedAt": "2026-10-22T15:35:49.616Z",
+ "updatedAt": "2026-10-23T15:28:42.674Z",
  "posts": [
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113619998627492078",
+   "secCode": null,
+   "name": "Mマート",
+   "stance": "mention",
+   "summary": "10/29オンライン決算説明会に登壇予定"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113619998627492078",
+   "secCode": null,
+   "name": "ネイス",
+   "stance": "mention",
+   "summary": "11/4会社説明会で南社長と対談予定"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-23",
+   "url": "https://x.com/kabu_st0ck/status/2113619998627492078",
+   "secCode": null,
+   "name": "akippa",
+   "stance": "mention",
+   "summary": "11/10決算説明会とIR Meetupに登壇"
+  },
   {
    "handle": "57jbgw2",
    "label": "カテキン",
@@ -9,7 +39,7 @@
    "secCode": "2484",
    "name": "出前館",
    "stance": "mention",
-   "summary": "以前保有していたと記載"
+   "summary": "過去に持っていたと記載"
   },
   {
    "handle": "kabu_st0ck",
@@ -29,7 +59,7 @@
    "secCode": "8366",
    "name": "滋賀銀行",
    "stance": "sell",
-   "summary": "銀行株と滋賀銀を少し前に売却、約6倍"
+   "summary": "少し前に売却、6倍弱になった"
   },
   {
    "handle": "57jbgw2",
@@ -39,7 +69,7 @@
    "secCode": "3563",
    "name": "スシロー",
    "stance": "hold",
-   "summary": "5倍になり日本株資産の8割を占める保有"
+   "summary": "5倍で日本株資産の80%を保有"
   },
   {
    "handle": "57jbgw2",
@@ -49,7 +79,7 @@
    "secCode": "7974",
    "name": "任天堂",
    "stance": "hold",
-   "summary": "保有として6900円と併記"
+   "summary": "保有。6900円と記載"
   },
   {
    "handle": "57jbgw2",
@@ -59,7 +89,7 @@
    "secCode": "4443",
    "name": "Sansan",
    "stance": "hold",
-   "summary": "保有として2046円と併記"
+   "summary": "保有。2046円と記載"
   },
   {
    "handle": "57jbgw2",
@@ -69,7 +99,7 @@
    "secCode": "8012",
    "name": "長瀬産業",
    "stance": "hold",
-   "summary": "保有として1090円と併記"
+   "summary": "保有。1090円と記載"
   },
   {
    "handle": "57jbgw2",
@@ -79,7 +109,17 @@
    "secCode": "4502",
    "name": "武田薬品工業",
    "stance": "hold",
-   "summary": "保有として6100円と併記"
+   "summary": "保有。6100円と記載"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-22",
+   "url": "https://x.com/kabu_st0ck/status/2113064930991898949",
+   "secCode": "6323",
+   "name": "ローツェ",
+   "stance": "mention",
+   "summary": "決算は跨がない方がよさそう"
   },
   {
    "handle": "kabu_st0ck",
@@ -89,7 +129,7 @@
    "secCode": "7974",
    "name": "任天堂",
    "stance": "mention",
-   "summary": "尻文字ネタへの返信で任天堂と投稿"
+   "summary": "尻文字ネタへの返信で社名のみ"
   },
   {
    "handle": "57jbgw2",
@@ -110,6 +150,16 @@
    "name": "akippa",
    "stance": "mention",
    "summary": "akippa決算説明会登壇予定を告知"
+  },
+  {
+   "handle": "kabu_st0ck",
+   "label": "ちょる子",
+   "postedAt": "2026-10-20",
+   "url": "https://x.com/kabu_st0ck/status/2112482338525659329",
+   "secCode": null,
+   "name": "akippa",
+   "stance": "mention",
+   "summary": "第3四半期決算説明会への登壇を告知"
   },
   {
    "handle": "57jbgw2",
