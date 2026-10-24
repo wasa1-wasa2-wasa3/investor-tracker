@@ -173,7 +173,12 @@ export default function Home() {
             : `15日以上前は保存済みの履歴から表示しています（最終更新 ${new Date(data.history.updatedAt).toLocaleString("ja-JP")}、${data.history.oldest} 以降）。この期間ではウォッチ対象外は表示されません。`}
         </div>
       )}
-      {data?.errors?.length > 0 && <div className="banner">一部の日付で取得エラー: {data.errors.join(" / ")}</div>}
+      {data?.errors?.length > 0 && (
+        <div className="banner">
+          EDINETから一部の日付が取れませんでした: {data.errors.join(" / ")}
+          {data.fallbackDates?.length > 0 && <>。その日は前回保存した履歴で表示しています（少し時間をおいて「再取得」で最新になります）</>}
+        </div>
+      )}
 
       <div className="tabs">
         <button className={`tab ${!horizon ? "on" : ""}`} onClick={() => pickHorizon(null)}>すべて</button>
