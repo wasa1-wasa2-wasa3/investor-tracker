@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { WATCHLIST, HORIZONS } from "../lib/watchlist";
 import Picks from "./Picks";
-import XPosts from "./XPosts";
 import HoldingRow from "./HoldingRow";
 import { ownReason, stockReasons, incomeReason, sizeReason, hasYutai } from "../lib/fit";
 import { buildUp, isBuildingUp } from "../lib/trend";
@@ -141,7 +140,6 @@ export default function Home() {
       <div className="layout">
       <Picks />
       <section className="feed">
-      <XPosts />
       <div className="controls">
         <select value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value={1}>今日</option>

@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { X_BY_CODE, STANCE } from "../lib/xposts";
-import { XSummary, XBadge } from "./XVoice";
 import Top3 from "./Top3";
 import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
@@ -50,7 +48,6 @@ export default function Picks() {
         )}
 
         {data && !data.error && !yutaiOnly && data.picks?.length > 0 && <Top3 picks={data.picks} />}
-        {data && !data.error && <XSummary list={[...(data.picks || []), ...(data.yutaiPicks || [])]} />}
 
         <ol className="picks-list">
           {list.map((p, i) => (
@@ -72,12 +69,6 @@ export default function Picks() {
                     買い増し中 {p.buildingUp.from === 0 ? "新規" : `${p.buildingUp.from.toFixed(1)}%`}→{p.buildingUp.to.toFixed(1)}%
                   </span>
                 )}
-                {X_BY_CODE[p.secCode] && (
-                  <a className="xbadge" href={X_BY_CODE[p.secCode][0].url} target="_blank" rel="noreferrer"
-                    title={X_BY_CODE[p.secCode].map((x) => `${x.label}: ${x.summary}`).join("\n")}>
-                    X {X_BY_CODE[p.secCode][0].label}が{STANCE[X_BY_CODE[p.secCode][0].stance]}
-                  </a>
-                )}
                 {p.investors.map((v) => (
                   <span key={v.id} className={`htag ${v.horizon}`}>{v.label}</span>
                 ))}
@@ -96,7 +87,6 @@ export default function Picks() {
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
                 {chaseWarning(p.quote) && <span className="chase">{chaseWarning(p.quote)}</span>}
               </div>
-              <XBadge code={p.secCode} />
             </li>
           ))}
         </ol>

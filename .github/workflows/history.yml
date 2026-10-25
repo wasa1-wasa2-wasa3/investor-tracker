@@ -49,21 +49,6 @@ jobs:
         env:
           EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
         run: node scripts/update-holdings.mjs
-      - name: 大物のX投稿から銘柄の言及を取得（Grok）
-        continue-on-error: true
-        env:
-          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          X_SOURCE: ${{ vars.X_SOURCE }}
-        run: |
-          # X投稿は Grok Bot（Issue経由・x-import.yml）で取り込む。APIで取るときはリポジトリ変数 X_SOURCE=api
-          if [ "$X_SOURCE" != "api" ]; then echo "X投稿はGrok Bot経由のためスキップ"; exit 0; fi
-          if [ -z "$XAI_API_KEY" ]; then echo "XAI_API_KEY 未設定のためスキップ"; exit 0; fi
-          node scripts/update-x.mjs
-      - name: イナゴ度の調査対象（20選の上位10）を書き出す（Grok Botが日曜14時に読む）
-        continue-on-error: true
-        env:
-          APP_URL: ${{ vars.APP_URL }}
-        run: node scripts/update-inago-targets.mjs
       - name: 変更があればコミット
         run: |
           if git diff --quiet data/; then
@@ -72,6 +57,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/history.json data/yutai.json data/asr-index.json data/holdings.json data/x-posts.json data/x-debug.json data/inago-targets.json
+          git add data/history.json data/yutai.json data/asr-index.json data/holdings.json
           git commit -m "履歴を更新 $(date -u +%Y-%m-%d)"
           git push

@@ -145,64 +145,6 @@ a { color: var(--chg); }
 .yutai-toggle.on { background: var(--new); color: #fff; font-weight: 700; }
 .size-tag { margin-left: 4px; font-size: 11px; padding: 0 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
 .chase { font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--new); color: var(--new); }
-.xposts { margin: 0 0 16px; border-style: solid; }
-.xpost .fix-target a { margin-left: 0; }
-.xposts > summary { cursor: pointer; font-weight: 700; }
-.xpost { flex-wrap: wrap; }
-.xstance { font-size: 11px; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
-.xstance.buy { border-color: var(--new); color: var(--new); font-weight: 700; }
-.xsummary { flex-basis: 100%; color: var(--muted); font-size: 12px; }
-.xbadge { font-size: 11px; padding: 1px 7px; border-radius: 4px; background: var(--ink); color: var(--card); text-decoration: none; }
-
-/* Xの声（押したときだけGrokに聞く） */
-.xvoice { padding-left: calc(1.4em + 8px); font-size: 12px; }
-.xvoice-btn, .xvoice-copy {
-  font: inherit; font-size: 12px; padding: 2px 10px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
-}
-.xvoice-btn:disabled { color: var(--muted); cursor: wait; }
-.xvoice-err { color: var(--new); margin-top: 4px; }
-.xvoice-body { margin-top: 6px; padding: 8px 10px; border-radius: 8px; background: var(--tag); }
-.xvoice-count b { font-variant-numeric: tabular-nums; }
-.xvoice-when { color: var(--muted); margin-left: 4px; }
-.xvoice-summary { margin: 4px 0; line-height: 1.6; }
-.xvoice-points { margin: 4px 0 8px; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
-.xstance.sell { border-color: var(--chg); color: var(--chg); font-weight: 700; }
-
-/* イナゴ度まとめ */
-.inago { margin: 8px 0 4px; }
-.inago-head {
-  cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 12px; border-radius: 8px;
-  border: 1px solid var(--gold); background: var(--card); list-style: none;
-}
-.inago-head::-webkit-details-marker { display: none; }
-.inago-ahead { margin-left: 8px; font-weight: 400; }
-.inago-empty { font-size: 12px; color: var(--muted); padding: 8px 12px; border: 1px dashed var(--line); border-radius: 8px; margin: 8px 0 4px; }
-.inago-check { font-size: 10px; margin-left: 6px; padding: 0 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
-.inago-check.ok { border-color: #5a8f4e; color: #5a8f4e; font-weight: 700; }
-.inago-check.ng { border-color: var(--muted); }
-.inago-drow.wrong { text-decoration: line-through; opacity: .6; }
-.inago-note { font-size: 11px; color: var(--muted); padding-left: 1.4em; }
-.inago-issue { margin-left: 10px; font-size: 12px; }
-.inago-sum { margin-top: 8px; padding: 10px 12px; border-radius: 8px; background: var(--tag); font-size: 12px; }
-.inago-sum section { margin-bottom: 10px; }
-.inago-sum h4 { margin: 0 0 4px; font-size: 13px; }
-.inago-sum h4 small { font-weight: 400; color: var(--muted); font-size: 11px; }
-.inago-names { display: flex; flex-wrap: wrap; gap: 4px 10px; }
-.inago-names i { font-style: normal; color: var(--muted); font-size: 11px; }
-.inago-danger h4 { color: var(--new); }
-.inago-drow { line-height: 1.6; }
-.inago-drow a { margin-left: 6px; }
-.inago-drow.rumor { color: var(--muted); }
-.inago-fact { font-size: 10px; margin-left: 6px; padding: 0 5px; border-radius: 4px; border: 1px solid var(--line); }
-.inago-badge {
-  font: inherit; font-size: 12px; padding: 2px 10px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
-}
-.inago-badge.quiet { border-color: #5a8f4e; }
-.inago-badge.swarming { border-color: var(--new); color: var(--new); font-weight: 700; }
-.inago-red { margin-left: 6px; }
-
 /* 3銘柄に絞ると */
 .top3 { margin: 8px 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--gold); background: var(--card); }
 .top3 h3 { margin: 0 0 6px; font-size: 14px; }
