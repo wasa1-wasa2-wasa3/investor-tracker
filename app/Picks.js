@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { X_BY_CODE, STANCE } from "../lib/xposts";
-import XVoice from "./XVoice";
+import { XSummary, XBadge, loadSaved } from "./XVoice";
 import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
@@ -11,6 +11,7 @@ export default function Picks() {
   const [data, setData] = useState(null);
   const [open, setOpen] = useState(true);
   const [yutaiOnly, setYutaiOnly] = useState(false); // 「優待ありのみ」：20選に関係なく優待あり銘柄を全件
+  const [voices, setVoices] = useState({}); // 銘柄コード → イナゴ度（Grok）。この端末に3日間残る
 
   // スマホでは一覧を先に見られるよう、最初は閉じておく
   useEffect(() => {
@@ -25,6 +26,16 @@ export default function Picks() {
   }, []);
 
   const list = (yutaiOnly ? data?.yutaiPicks : data?.picks) || [];
+
+  // 前に調べたイナゴ度を読み込む
+  useEffect(() => {
+    const saved = {};
+    for (const p of [...(data?.picks || []), ...(data?.yutaiPicks || [])]) {
+      const s = loadSaved(p.secCode);
+      if (s) saved[p.secCode] = s;
+    }
+    setVoices((m) => ({ ...saved, ...m }));
+  }, [data]);
 
   return (
     <aside className="picks">
@@ -47,6 +58,8 @@ export default function Picks() {
         {data && !data.error && yutaiOnly && list.length === 0 && (
           <div className="picks-empty">優待あり銘柄はありません</div>
         )}
+
+        {list.length > 0 && <XSummary list={list.slice(0, 30)} voices={voices} setVoices={setVoices} />}
 
         <ol className="picks-list">
           {list.map((p, i) => (
@@ -91,7 +104,7 @@ export default function Picks() {
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
                 {chaseWarning(p.quote) && <span className="chase">{chaseWarning(p.quote)}</span>}
               </div>
-              <XVoice code={p.secCode} name={p.name} />
+              <XBadge data={voices[p.secCode]} />
             </li>
           ))}
         </ol>

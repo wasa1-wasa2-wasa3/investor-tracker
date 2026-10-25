@@ -7,11 +7,11 @@ export const maxDuration = 60;
 const TTL = 3 * 24 * 60 * 60 * 1000;
 const cache = new Map(); // code -> { at, voice }
 // 使いすぎ防止：1日に呼べる回数（リポジトリ外の人がURLを叩いても費用が膨らまないように）
-const DAILY_LIMIT = Number(process.env.XVOICE_DAILY_LIMIT) || 20;
+const DAILY_LIMIT = Number(process.env.XVOICE_DAILY_LIMIT) || 60; // 20銘柄まとめて調べても数回分
 let usage = { day: "", n: 0 };
 const NO_STORE = { headers: { "Cache-Control": "no-store" } };
 
-// GET /api/xvoice?code=4043&name=トクヤマ … その銘柄のXでの強気・弱気の傾向（Grok）
+// GET /api/xvoice?code=4043&name=トクヤマ … その銘柄のイナゴ度と危険情報（Grok）
 export async function GET(req) {
   const q = new URL(req.url).searchParams;
   const code = q.get("code") || "";

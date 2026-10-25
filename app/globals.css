@@ -168,3 +168,31 @@ a { color: var(--chg); }
 .xvoice-summary { margin: 4px 0; line-height: 1.6; }
 .xvoice-points { margin: 4px 0 8px; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
 .xstance.sell { border-color: var(--chg); color: var(--chg); font-weight: 700; }
+
+/* イナゴ度まとめ */
+.inago { margin: 8px 0 4px; }
+.inago-btn {
+  width: 100%; font: inherit; font-size: 13px; font-weight: 700; padding: 8px 12px; border-radius: 8px;
+  border: 1px solid var(--gold); background: var(--card); color: var(--ink); cursor: pointer;
+}
+.inago-btn:disabled { color: var(--muted); cursor: wait; }
+.inago-bar { height: 4px; border-radius: 2px; background: var(--tag); margin-top: 6px; overflow: hidden; }
+.inago-bar span { display: block; height: 100%; background: var(--gold); transition: width .3s; }
+.inago-sum { margin-top: 8px; padding: 10px 12px; border-radius: 8px; background: var(--tag); font-size: 12px; }
+.inago-sum section { margin-bottom: 10px; }
+.inago-sum h4 { margin: 0 0 4px; font-size: 13px; }
+.inago-sum h4 small { font-weight: 400; color: var(--muted); font-size: 11px; }
+.inago-names { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.inago-names i { font-style: normal; color: var(--muted); font-size: 11px; }
+.inago-danger h4 { color: var(--new); }
+.inago-drow { line-height: 1.6; }
+.inago-drow a { margin-left: 6px; }
+.inago-drow.rumor { color: var(--muted); }
+.inago-fact { font-size: 10px; margin-left: 6px; padding: 0 5px; border-radius: 4px; border: 1px solid var(--line); }
+.inago-badge {
+  font: inherit; font-size: 12px; padding: 2px 10px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
+}
+.inago-badge.quiet { border-color: #5a8f4e; }
+.inago-badge.swarming { border-color: var(--new); color: var(--new); font-weight: 700; }
+.inago-red { margin-left: 6px; }
