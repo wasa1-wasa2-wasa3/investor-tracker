@@ -1,95 +1,53 @@
 "use client";
 import { useState } from "react";
-import { LEVELS, DANGER_KINDS } from "../lib/xvoice";
+import { INAGO, INAGO_BY_CODE, LEVELS, DANGER_KINDS, CHECKS } from "../lib/inago";
 import { rangePosition } from "../lib/fit";
 
-// イナゴ度（Xにもう群衆が来ているか）と危険情報。ボタンを押したときだけGrokに聞く。
-// 結果はこの端末に3日間残すので、開き直しても呼び直さない（費用がかからない）
-const TTL = 3 * 24 * 60 * 60 * 1000;
-const PARALLEL = 4; // 同時に問い合わせる銘柄数
-const keyOf = (code) => `inago:${code}`;
-
-export function loadSaved(code) {
-  try {
-    const s = JSON.parse(localStorage.getItem(keyOf(code)) || "null");
-    return s && Date.now() - s.at < TTL ? s : null;
-  } catch {
-    return null;
-  }
-}
-
-async function fetchOne(p) {
-  const r = await fetch(`/api/xvoice?code=${p.secCode}&name=${encodeURIComponent(p.name || "")}`);
-  const text = await r.text();
-  let d;
-  try {
-    d = JSON.parse(text);
-  } catch {
-    // Vercelの時間切れ（504）などはJSONではなく文字のページが返る
-    throw new Error(r.status === 504 ? "時間切れ（Grokの返事が遅すぎました）" : `サーバーエラー（HTTP ${r.status}）`);
-  }
-  if (!r.ok || d.error) {
-    const e = new Error(d.error || `HTTP ${r.status}`);
-    e.stop = d.stop || r.status === 429;
-    throw e;
-  }
-  try {
-    localStorage.setItem(keyOf(p.secCode), JSON.stringify(d));
-  } catch {}
-  return d;
-}
+// イナゴ度のまとめ。毎週土曜にGrok Botが調べ、Claudeが危険情報を裏取りした結果を表示する（費用ゼロ）
+const shortName = (n) => (n || "").replace(/^株式会社|株式会社$/g, "").slice(0, 12);
+const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" }) : "");
 
 // 「静か × 52週の安値寄り × 危険なし」＝大物は買ったが、まだ誰も来ていない
-const isAhead = (p, v) => v.level === "quiet" && !v.dangers.length && (rangePosition(p.quote) ?? 1) < 0.6;
+const isAhead = (p, v) => v.level === "quiet" && !liveDangers(v).length && p?.quote && (rangePosition(p.quote) ?? 1) < 0.6;
+// Claudeが「誤り」と判定した危険情報は数えない
+const liveDangers = (v) => v.dangers.filter((d) => d.check !== "wrong");
 
-const shortName = (n) => (n || "").replace(/^株式会社|株式会社$/g, "").slice(0, 12);
+function Danger({ d, name }) {
+  const c = CHECKS[d.check];
+  return (
+    <div className={`inago-drow ${d.fact || d.check === "confirmed" ? "" : "rumor"} ${d.check === "wrong" ? "wrong" : ""}`}>
+      {name && <b>{name} </b>}🔴 {DANGER_KINDS[d.kind]}：{d.text}
+      <span className="inago-fact">{d.fact ? "事実" : "噂"}</span>
+      {c && <span className={`inago-check ${c.cls}`} title={d.checkNote || ""}>{c.label}</span>}
+      <a href={d.url} target="_blank" rel="noreferrer">根拠</a>
+      {d.checkNote && <div className="inago-note">Claude：{d.checkNote}</div>}
+    </div>
+  );
+}
 
 function toText(rows) {
-  const lines = ["【イナゴ度まとめ】Grok調べ・直近7日"];
+  const lines = [`【イナゴ度まとめ】Grok調べ ${fmtDate(INAGO.updatedAt)}`];
   for (const { p, v } of rows) {
-    lines.push(`- ${shortName(p.name)}（${p.secCode}・${p.total}点）${LEVELS[v.level].icon}${LEVELS[v.level].label} 投稿${v.recent ?? "?"}件（前週${v.before ?? "?"}件）買い報告${v.buyReports ?? "?"}人 ${v.summary}`);
-    for (const d of v.dangers) lines.push(`  🔴${DANGER_KINDS[d.kind]}：${d.text}（${d.fact ? "事実" : "噂"}）${d.url}`);
+    lines.push(`- ${shortName(v.name)}（${v.secCode}${p ? `・${p.total}点` : ""}）${LEVELS[v.level].icon}${LEVELS[v.level].label} 投稿${v.recent ?? "?"}件（前週${v.before ?? "?"}件）買い報告${v.buyReports ?? "?"}人 ${v.summary}`);
+    for (const d of v.dangers) lines.push(`  🔴${DANGER_KINDS[d.kind]}：${d.text}（${d.fact ? "事実" : "噂"}${d.check ? "・" + CHECKS[d.check]?.label : ""}）${d.url}`);
   }
   return lines.join("\n");
 }
 
-// 20選の上に出す「まとめて調べる」ボタンと要約
-export function XSummary({ list, voices, setVoices }) {
-  const [run, setRun] = useState(null); // { done, total, errors }
+// 20選の上に出す要約
+export function XSummary({ list }) {
+  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  const rows = list.filter((p) => voices[p.secCode]).map((p) => ({ p, v: voices[p.secCode].voice }));
-  const todo = list.filter((p) => !voices[p.secCode]);
-  const running = run && run.done < run.total;
-
-  const start = async () => {
-    const queue = [...todo];
-    const errors = [];
-    let done = 0;
-    setRun({ done: 0, total: queue.length, errors });
-    const worker = async () => {
-      while (queue.length) {
-        const p = queue.shift();
-        try {
-          const d = await fetchOne(p);
-          setVoices((m) => ({ ...m, [p.secCode]: d }));
-        } catch (e) {
-          if (e.stop) {
-            // 残高切れ・今日の上限は全銘柄同じなので、1回だけ表示して残りはやめる
-            if (!errors.some((x) => x.startsWith("中止"))) errors.push(`中止：${e.message}`);
-          } else errors.push(`${shortName(p.name)}：${e.message}`);
-          if (e.stop) {
-            done += queue.length; // 今日の上限なら残りはやめる
-            queue.length = 0;
-          }
-        }
-        done++;
-        setRun((r) => ({ ...r, done: Math.min(done, r.total), errors: [...errors] }));
-      }
-    };
-    await Promise.all(Array.from({ length: PARALLEL }, worker));
-    setRun((r) => ({ ...r, done: r.total }));
-  };
+  const items = INAGO.items || [];
+  if (!items.length) {
+    return <div className="inago-empty">🦗 イナゴ度：毎週土曜の朝にGrokが調べて、ここに表示されます</div>;
+  }
+  const byCode = Object.fromEntries(list.map((p) => [p.secCode, p]));
+  const rows = items.map((v) => ({ p: byCode[v.secCode], v }));
+  const danger = rows.filter((r) => liveDangers(r.v).length);
+  const ahead = rows.filter((r) => isAhead(r.p, r.v));
+  const byLevel = (lv) => rows.filter((r) => r.v.level === lv);
+  const names = (rs) => rs.map(({ p, v }) => <span key={v.secCode}>{shortName(v.name)}{p && <i> {p.total}点</i>}</span>);
 
   const copy = async () => {
     try {
@@ -99,79 +57,54 @@ export function XSummary({ list, voices, setVoices }) {
     } catch {}
   };
 
-  const danger = rows.filter((r) => r.v.dangers.length);
-  const ahead = rows.filter((r) => isAhead(r.p, r.v));
-  const byLevel = (lv) => rows.filter((r) => r.v.level === lv);
-
   return (
-    <div className="inago">
-      {todo.length > 0 && (
-        <button className="inago-btn" onClick={start} disabled={running}>
-          {running
-            ? `Grokに聞いています… ${run.done}/${run.total}銘柄`
-            : rows.length
-              ? `残り${todo.length}銘柄のイナゴ度を調べる`
-              : `${list.length}銘柄のイナゴ度をまとめて調べる`}
-        </button>
-      )}
-      {running && <div className="inago-bar"><span style={{ width: `${(run.done / run.total) * 100}%` }} /></div>}
-      {run?.errors?.length > 0 && !running && (
-        <div className="xvoice-err">調べられなかった銘柄：{run.errors.join("／")}</div>
-      )}
-
-      {rows.length > 0 && (
-        <div className="inago-sum">
-          {danger.length > 0 && (
-            <section className="inago-danger">
-              <h4>🔴 危険情報あり</h4>
-              {danger.map(({ p, v }) =>
-                v.dangers.map((d) => (
-                  <div key={p.secCode + d.url} className={`inago-drow ${d.fact ? "" : "rumor"}`}>
-                    <b>{shortName(p.name)}</b> {DANGER_KINDS[d.kind]}：{d.text}
-                    <span className="inago-fact">{d.fact ? "事実" : "噂"}</span>
-                    <a href={d.url} target="_blank" rel="noreferrer">根拠</a>
-                  </div>
-                ))
-              )}
+    <details className="inago" open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
+      <summary className="inago-head">
+        🦗 イナゴ度まとめ（{fmtDate(INAGO.updatedAt)}・Grok調べ）
+        {danger.length > 0 && <span className="inago-red">🔴{danger.length}銘柄</span>}
+        {ahead.length > 0 && <span className="inago-ahead">🌱先回り{ahead.length}</span>}
+      </summary>
+      <div className="inago-sum">
+        {danger.length > 0 && (
+          <section className="inago-danger">
+            <h4>🔴 危険情報あり</h4>
+            {danger.map(({ v }) => liveDangers(v).map((d) => <Danger key={v.secCode + d.url} d={d} name={shortName(v.name)} />))}
+          </section>
+        )}
+        {ahead.length > 0 && (
+          <section>
+            <h4>🌱 先回り候補<small>　静か × 安値寄り × 危険なし</small></h4>
+            <div className="inago-names">{names(ahead)}</div>
+          </section>
+        )}
+        {["swarming", "gathering", "quiet"].map((lv) =>
+          byLevel(lv).length ? (
+            <section key={lv}>
+              <h4>{LEVELS[lv].icon} {LEVELS[lv].label}<small>　{LEVELS[lv].note}</small></h4>
+              <div className="inago-names">{names(byLevel(lv))}</div>
             </section>
-          )}
-          {ahead.length > 0 && (
-            <section>
-              <h4>🌱 先回り候補（静か × 安値寄り × 危険なし）</h4>
-              <div className="inago-names">
-                {ahead.map(({ p }) => <span key={p.secCode}>{shortName(p.name)} <i>{p.total}点</i></span>)}
-              </div>
-            </section>
-          )}
-          {["swarming", "gathering", "quiet"].map((lv) =>
-            byLevel(lv).length ? (
-              <section key={lv}>
-                <h4>{LEVELS[lv].icon} {LEVELS[lv].label}<small>　{LEVELS[lv].note}</small></h4>
-                <div className="inago-names">
-                  {byLevel(lv).map(({ p }) => <span key={p.secCode}>{shortName(p.name)} <i>{p.total}点</i></span>)}
-                </div>
-              </section>
-            ) : null
-          )}
-          <button className="xvoice-copy" onClick={copy}>{copied ? "コピーしました" : "まとめをコピー（Claudeで裏取り用）"}</button>
-          <p className="picks-note">Grok（AI）の判定で、投稿数はおおよそです。危険情報は必ず根拠を開いて確認してください。何を買うかは大物の動き、いつ買うかの目安にXを使う想定です。</p>
-        </div>
-      )}
-    </div>
+          ) : null
+        )}
+        <button className="xvoice-copy" onClick={copy}>{copied ? "コピーしました" : "まとめをコピー"}</button>
+        {INAGO.issueUrl && <a className="inago-issue" href={INAGO.issueUrl} target="_blank" rel="noreferrer">Grokの元データ</a>}
+        <p className="picks-note">投稿数はGrok（AI）のおおよその数です。危険情報は根拠を開いて確認してください。✓確認済み・✕誤りはClaudeが一次情報で裏取りした結果です。</p>
+      </div>
+    </details>
   );
 }
 
 // 各銘柄の行に出すバッジ。タップで詳細
-export function XBadge({ data }) {
+export function XBadge({ code }) {
   const [open, setOpen] = useState(false);
-  if (!data) return null;
-  const v = data.voice;
+  const v = INAGO_BY_CODE[code];
+  if (!v) return null;
   const L = LEVELS[v.level];
+  const ds = liveDangers(v);
   return (
     <div className="xvoice">
       <button className={`inago-badge ${v.level}`} onClick={() => setOpen((o) => !o)}>
         {L.icon} {L.label}
-        {v.dangers.length > 0 && <span className="inago-red">🔴{v.dangers.length}</span>}
+        {ds.length > 0 && <span className="inago-red">🔴{ds.length}</span>}
         {open ? " ▲" : " ▼"}
       </button>
       {open && (
@@ -179,16 +112,10 @@ export function XBadge({ data }) {
           <div className="xvoice-count">
             投稿 <b>{v.recent ?? "?"}</b>件（前週 {v.before ?? "?"}件）・買い報告 <b>{v.buyReports ?? "?"}</b>人
             {v.hype && <span className="chase">煽り多め</span>}
-            <span className="xvoice-when">（{new Date(data.at).toLocaleDateString("ja-JP")}に取得）</span>
+            <span className="xvoice-when">（{fmtDate(INAGO.updatedAt)}調べ）</span>
           </div>
           {v.summary && <p className="xvoice-summary">{v.summary}</p>}
-          {v.dangers.map((d) => (
-            <div key={d.url} className={`inago-drow ${d.fact ? "" : "rumor"}`}>
-              🔴 {DANGER_KINDS[d.kind]}：{d.text}
-              <span className="inago-fact">{d.fact ? "事実" : "噂"}</span>
-              <a href={d.url} target="_blank" rel="noreferrer">根拠</a>
-            </div>
-          ))}
+          {v.dangers.map((d) => <Danger key={d.url} d={d} />)}
         </div>
       )}
     </div>

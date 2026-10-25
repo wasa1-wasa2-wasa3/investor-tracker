@@ -59,6 +59,11 @@ jobs:
           if [ "$X_SOURCE" != "api" ]; then echo "X投稿はGrok Bot経由のためスキップ"; exit 0; fi
           if [ -z "$XAI_API_KEY" ]; then echo "XAI_API_KEY 未設定のためスキップ"; exit 0; fi
           node scripts/update-x.mjs
+      - name: イナゴ度の調査対象（20選）を書き出す（Grok Botが土曜朝に読む）
+        continue-on-error: true
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: node scripts/update-inago-targets.mjs
       - name: 変更があればコミット
         run: |
           if git diff --quiet data/; then
@@ -67,6 +72,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/history.json data/yutai.json data/asr-index.json data/holdings.json data/x-posts.json data/x-debug.json
+          git add data/history.json data/yutai.json data/asr-index.json data/holdings.json data/x-posts.json data/x-debug.json data/inago-targets.json
           git commit -m "履歴を更新 $(date -u +%Y-%m-%d)"
           git push
