@@ -202,3 +202,12 @@ a { color: var(--chg); }
 .inago-badge.quiet { border-color: #5a8f4e; }
 .inago-badge.swarming { border-color: var(--new); color: var(--new); font-weight: 700; }
 .inago-red { margin-left: 6px; }
+
+/* 3銘柄に絞ると */
+.top3 { margin: 8px 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--gold); background: var(--card); }
+.top3 h3 { margin: 0 0 6px; font-size: 14px; }
+.top3-list { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; }
+.top3-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; font-weight: 700; }
+.top3-score { margin-left: auto; color: var(--gold); font-variant-numeric: tabular-nums; }
+.top3-why { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; font-size: 11px; }
+.top3-reason { padding: 0 6px; border-radius: 4px; background: var(--tag); color: var(--ink); }

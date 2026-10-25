@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { X_BY_CODE, STANCE } from "../lib/xposts";
 import { XSummary, XBadge } from "./XVoice";
+import Top3 from "./Top3";
 import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
@@ -48,6 +49,7 @@ export default function Picks() {
           <div className="picks-empty">優待あり銘柄はありません</div>
         )}
 
+        {data && !data.error && !yutaiOnly && data.picks?.length > 0 && <Top3 picks={data.picks} />}
         {data && !data.error && <XSummary list={[...(data.picks || []), ...(data.yutaiPicks || [])]} />}
 
         <ol className="picks-list">
@@ -89,6 +91,7 @@ export default function Picks() {
                 <span>
                   時価総額 <b>{fmtOku(p.quote.marketCapOku)}</b>
                   {sizeLabel(p.quote.marketCapOku) && <span className="size-tag">{sizeLabel(p.quote.marketCapOku)}</span>}
+                  {p.industry && <span className="size-tag">{p.industry}</span>}
                 </span>
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
                 {chaseWarning(p.quote) && <span className="chase">{chaseWarning(p.quote)}</span>}
