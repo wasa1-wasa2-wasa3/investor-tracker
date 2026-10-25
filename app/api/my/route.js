@@ -1,4 +1,4 @@
-import { isLoggedIn, isConfigured, parseHoldings } from "../../../lib/my-auth";
+import { isLoggedIn, isConfigured, parseHoldings, riskSettings } from "../../../lib/my-auth";
 import { getLargeHoldingFilings } from "../../../lib/edinet";
 import { getHoldings } from "../../../lib/holdings";
 import { getQuotes } from "../../../lib/quotes";
@@ -11,6 +11,7 @@ export const maxDuration = 60;
 const DAYS = 180;
 const ALERT_DAYS = 30; // これより新しい大物の動きを「お知らせ」に出す
 const NO_STORE = { "Cache-Control": "no-store, private" };
+const NEAR_STOP_PCT = 5; // 撤退価格まで株価の5%以内に近づいたら「接近」
 
 // 1件の報告書で、大物が増やしたのか減らしたのか
 function direction(f, h) {
@@ -22,12 +23,30 @@ function direction(f, h) {
   return "flat";
 }
 
+// 撤退ライン：銘柄ごとの撤退価格 → なければ取得単価から下落率（銘柄ごと → 全体の既定）
+function stopInfo(m, price, risk) {
+  let stopPrice = m.stopPrice;
+  let basis = stopPrice != null ? "price" : null;
+  const pct = m.stopPct ?? risk.stopPct;
+  if (stopPrice == null && pct != null && m.cost != null) {
+    stopPrice = Math.round(m.cost * (1 - pct / 100) * 100) / 100;
+    basis = `-${pct}%`;
+  }
+  if (stopPrice == null) return null;
+  const distancePct = price != null ? Math.round(((price - stopPrice) / price) * 1000) / 10 : null;
+  const status = price == null ? null : price <= stopPrice ? "broken" : distancePct <= NEAR_STOP_PCT ? "near" : "ok";
+  // 撤退ラインで売った場合の損益
+  const lossAtStop = m.cost != null && m.shares != null ? Math.round((stopPrice - m.cost) * m.shares) : null;
+  return { price: stopPrice, basis, distancePct, status, lossAtStop };
+}
+
 // GET /api/my … ログイン中だけ、自分の保有銘柄と、それぞれの大物の動きを返す
 export async function GET(req) {
   if (!isConfigured()) return Response.json({ error: "not_configured" }, { status: 503, headers: NO_STORE });
   if (!isLoggedIn(req)) return Response.json({ error: "login" }, { status: 401, headers: NO_STORE });
 
   const mine = parseHoldings();
+  const risk = riskSettings();
   const codesSet = new Set(mine.map((m) => m.secCode));
 
   // 証券コード → 社名・業種・優待
@@ -96,12 +115,25 @@ export async function GET(req) {
     const price = q?.price ?? null;
     const pl = price != null && m.cost != null && m.shares != null ? Math.round((price - m.cost) * m.shares) : null;
     const plPct = price != null && m.cost ? Math.round(((price - m.cost) / m.cost) * 1000) / 10 : null;
-    return { ...m, ...(info[m.secCode] || {}), quote: q, pl, plPct, investors, events };
+    const value = price != null && m.shares != null ? price * m.shares : null;
+    return { ...m, ...(info[m.secCode] || {}), quote: q, pl, plPct, value, stop: stopInfo(m, price, risk), investors, events };
   });
+
+  // 1銘柄の上限：資産総額 × 上限%
+  const holdingsValue = stocks.reduce((s, x) => s + (x.value ?? 0), 0);
+  const total = risk.total ?? holdingsValue;
+  const maxValue = total > 0 ? total * (risk.maxPct / 100) : null;
+  for (const s of stocks) {
+    s.weightPct = s.value != null && total > 0 ? Math.round((s.value / total) * 1000) / 10 : null;
+    s.overLimit = s.value != null && maxValue != null && s.value > maxValue;
+    // 上限まで減らすなら何株にするか（100株単位で切り捨て）
+    s.limitShares = s.overLimit && s.quote?.price ? Math.floor(maxValue / s.quote.price / 100) * 100 : null;
+  }
+  const riskOut = { total: Math.round(total), totalSource: risk.total != null ? "env" : "holdings", maxPct: risk.maxPct, maxValue: maxValue != null ? Math.round(maxValue) : null, stopPct: risk.stopPct, nearStopPct: NEAR_STOP_PCT };
 
   alerts.sort((a, b) => (a.date < b.date ? 1 : -1));
   return Response.json(
-    { updatedAt: new Date().toISOString(), days: DAYS, alertDays: ALERT_DAYS, quoteError, stocks, alerts },
+    { updatedAt: new Date().toISOString(), days: DAYS, alertDays: ALERT_DAYS, quoteError, risk: riskOut, stocks, alerts },
     { headers: NO_STORE },
   );
 }

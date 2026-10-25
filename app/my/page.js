@@ -93,7 +93,7 @@ export default function My() {
 }
 
 function Ready({ data, onLogout }) {
-  const { stocks, alerts, alertDays, quoteError } = data;
+  const { stocks, alerts, alertDays, quoteError, risk } = data;
   const total = stocks.reduce((s, x) => s + (x.pl ?? 0), 0);
   const value = stocks.reduce((s, x) => s + (x.quote?.price != null && x.shares ? x.quote.price * x.shares : 0), 0);
   const sells = alerts.filter((a) => a.kind === "sell");
@@ -107,6 +107,8 @@ function Ready({ data, onLogout }) {
         <button type="button" className="my-logout" onClick={onLogout}>ログアウト</button>
       </div>
       {quoteError && <p className="banner">{quoteError}</p>}
+
+      <RiskPanel stocks={stocks} risk={risk} />
 
       <section className="my-alerts">
         <h2>大物の動き（直近{alertDays}日）</h2>
@@ -153,6 +155,22 @@ function Ready({ data, onLogout }) {
               {s.pl != null && <span className={s.pl >= 0 ? "pos" : "neg"}>{signed(s.pl, "円")}</span>}
             </div>
             <HoldInfo quote={s.quote} yutai={s.yutai} />
+            <div className="my-risk-row">
+              {s.weightPct != null && (
+                <span className={`my-weight ${s.overLimit ? "over" : ""}`}>
+                  資産の{s.weightPct}%{s.overLimit && `（上限${risk.maxPct}%超え${s.limitShares ? `・${s.limitShares.toLocaleString()}株まで` : s.limitShares === 0 ? "・1単元でも超える" : ""}）`}
+                </span>
+              )}
+              {s.stop ? (
+                <span className={`my-stop ${s.stop.status || ""}`}>
+                  撤退 {s.stop.price.toLocaleString()}円{s.stop.basis !== "price" ? `（取得${s.stop.basis}）` : ""}
+                  {s.stop.status === "broken" ? "・割れています" : s.stop.distancePct != null ? `・あと${s.stop.distancePct}%` : ""}
+                  {s.stop.lossAtStop != null && <small>（撤退時 {signed(s.stop.lossAtStop, "円")}）</small>}
+                </span>
+              ) : (
+                <span className="my-stop none">撤退ライン未設定</span>
+              )}
+            </div>
             <div className="my-investors">
               {s.investors.length === 0 ? (
                 <span className="hold-sub">半年以内に大物の報告書なし</span>
@@ -171,5 +189,91 @@ function Ready({ data, onLogout }) {
         ))}
       </section>
     </>
+  );
+}
+
+// 資金管理：撤退ラインを割った・近い銘柄と、上限を超えている銘柄
+function RiskPanel({ stocks, risk }) {
+  const broken = stocks.filter((s) => s.stop?.status === "broken");
+  const near = stocks.filter((s) => s.stop?.status === "near");
+  const over = stocks.filter((s) => s.overLimit);
+  const noStop = stocks.filter((s) => !s.stop).length;
+  const ok = !broken.length && !near.length && !over.length;
+  return (
+    <section className={`my-risk ${ok ? "" : "warn"}`}>
+      <h2>資金管理</h2>
+      <p className="my-risk-rule">
+        1銘柄は資産の<b>{risk.maxPct}%</b>まで（<b>{yen(risk.maxValue)}</b>）
+        <small>
+          資産総額 {yen(risk.total)}
+          {risk.totalSource === "holdings" && "（MY_TOTAL未設定のため、ここに載っている銘柄の評価額で計算）"}
+        </small>
+      </p>
+      {ok && <p className="picks-empty">撤退ラインを割った銘柄も、上限を超えた銘柄もありません。</p>}
+      <ul className="my-risk-list">
+        {broken.map((s) => (
+          <li key={`b${s.secCode}`} className="broken">
+            <span className="tag">撤退ライン割れ</span>
+            <b>{s.name || s.secCode}</b> 現在 {s.quote.price.toLocaleString()}円 ／ 撤退 {s.stop.price.toLocaleString()}円。買う前に決めたルールどおりなら売りどきです
+          </li>
+        ))}
+        {near.map((s) => (
+          <li key={`n${s.secCode}`} className="near">
+            <span className="tag">撤退ライン接近</span>
+            <b>{s.name || s.secCode}</b> あと{s.stop.distancePct}%で撤退 {s.stop.price.toLocaleString()}円
+          </li>
+        ))}
+        {over.map((s) => (
+          <li key={`o${s.secCode}`} className="over">
+            <span className="tag">上限超え</span>
+            <b>{s.name || s.secCode}</b> 資産の{s.weightPct}%（{yen(Math.round(s.value))}）
+            {s.limitShares ? `。上限内にするなら${s.limitShares.toLocaleString()}株まで` : s.limitShares === 0 ? "。1単元でも上限を超える金額です" : ""}
+          </li>
+        ))}
+      </ul>
+      {noStop > 0 && <p className="picks-note">撤退ラインが未設定の銘柄が{noStop}つあります。MY_HOLDINGSに撤退価格を書くか、MY_STOP_PCTで一律に設定できます。</p>}
+      <SizeCalc risk={risk} stocks={stocks} />
+    </section>
+  );
+}
+
+// これから買う銘柄の上限株数
+function SizeCalc({ risk, stocks }) {
+  const [code, setCode] = useState("");
+  const [res, setRes] = useState(null);
+  const [err, setErr] = useState("");
+  async function calc(e) {
+    e.preventDefault();
+    setErr("");
+    setRes(null);
+    const c = code.trim().toUpperCase();
+    if (!/^[0-9][0-9A-Z]{3}$/.test(c)) return setErr("証券コードを4けたで入れてください（例：8585）");
+    try {
+      const j = await (await fetch(`/api/quotes?codes=${c}`)).json();
+      const q = j.quotes?.[c];
+      if (!q?.price) return setErr("株価を取得できませんでした");
+      const held = stocks.find((s) => s.secCode === c);
+      const room = Math.max(0, (risk.maxValue ?? 0) - (held?.value ?? 0));
+      const units = Math.floor(room / (q.price * 100));
+      setRes({ code: c, price: q.price, held, room, units, stop: risk.stopPct != null ? Math.round(q.price * (1 - risk.stopPct / 100)) : null });
+    } catch {
+      setErr("株価を取得できませんでした");
+    }
+  }
+  return (
+    <form className="my-calc" onSubmit={calc}>
+      <label htmlFor="my-calc-code">これから買う銘柄の上限</label>
+      <input id="my-calc-code" inputMode="text" placeholder="証券コード" value={code} onChange={(e) => setCode(e.target.value)} />
+      <button type="submit">計算</button>
+      {err && <p className="my-error">{err}</p>}
+      {res && (
+        <p className="my-calc-out">
+          {res.code} 株価 {res.price.toLocaleString()}円 → 1単元 {yen(Math.round(res.price * 100))}。
+          {res.held && `すでに${yen(Math.round(res.held.value ?? 0))}持っているので、`}
+          あと{yen(Math.round(res.room))}まで＝<b>{res.units > 0 ? `${(res.units * 100).toLocaleString()}株（${res.units}単元）まで` : "1単元も買えません（上限超え）"}</b>
+          {res.stop != null && res.units > 0 && `。今の株価で買うなら撤退ラインは${res.stop.toLocaleString()}円（-${risk.stopPct}%）`}
+        </p>
+      )}
+    </form>
   );
 }
