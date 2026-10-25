@@ -62,23 +62,23 @@ GitHub の Issue に投稿してもらう。Issue が作られると `.github/wo
 `scripts/update-x.mjs` が API の x_search で同じことをする。費用がかかる（2人で1回1〜2ドル程度）ので普段は止めてある。
 使うときはリポジトリ変数 `X_SOURCE=api` とシークレット `XAI_API_KEY` を設定する。
 
-## イナゴ度（毎週土曜・費用ゼロ）
+## イナゴ度（毎週日曜・上位10銘柄）
 
 何を買うかは大物（アクティビスト・長期投資家）が決める。Xは「群衆がもう来ているか＝いつ買うか」の温度計として使う。
 xAIのAPIは1銘柄0.6〜1ドルかかったのでやめ、Grok Bot（無料枠）とClaude（定額）をGitHub経由でつなぐ。
 
-1. **平日夜**：履歴の更新（history.yml）の最後に、20選を `data/inago-targets.json` に書き出す（`scripts/update-inago-targets.mjs`、公開中のアプリの `/api/picks` を読む。URLはリポジトリ変数 `APP_URL` で変更可）
-2. **土曜朝**：Grok Bot（定期実行）が `data/inago-targets.json` を読んで調べ、タイトル `[イナゴ度] YYYY-MM-DD` の Issue に JSON を投稿 → x-import.yml が `data/inago.json` に取り込む（`scripts/import-inago-issue.mjs`、対象リストにない銘柄は捨てる）
-3. **土曜の昼前**：Claude（定期実行）が危険情報を一次情報で裏取りし、`dangers[].check`（confirmed / unconfirmed / wrong）と `checkNote` を書き足してコミット
+1. **平日夜**：履歴の更新（history.yml）の最後に、20選の上位10銘柄を `data/inago-targets.json` に書き出す（`scripts/update-inago-targets.mjs`、公開中のアプリの `/api/picks` を読む。URLはリポジトリ変数 `APP_URL` で変更可）
+2. **日曜14時**：Grok Bot（定期実行）が `data/inago-targets.json` を読んで調べ、タイトル `[イナゴ度] YYYY-MM-DD` の Issue に JSON を投稿 → x-import.yml が `data/inago.json` に取り込む（`scripts/import-inago-issue.mjs`、対象リストにない銘柄は捨てる）
+3. **日曜15時すぎ**：Claude（定期実行）が危険情報を一次情報で裏取りし、`dangers[].check`（confirmed / unconfirmed / wrong）と `checkNote` を書き足してコミット
 
 - イナゴ度：🌱静か／🦗集まり始め／🦗🦗群がっている
 - 🔴危険情報：減配・無配、優待の廃止や改悪、下方修正、増資・売出し、不祥事・処分、大物の売却 だけ
 - 🌱先回り候補：静か × 52週の安値寄り × 危険なし（Claudeが「誤り」とした危険情報は数えない）
 - 画面：20選の上の「イナゴ度まとめ」と、各銘柄のバッジ（`app/XVoice.js`、`lib/inago.js`）。20選の採点には使わない
 
-### Grok Bot への頼み方（定期実行：毎週土曜 7:00）
+### Grok Bot への頼み方（定期実行：毎週日曜 14:00）
 
-> 毎週土曜の朝7時に、GitHub の wasa1-wasa2-wasa3/investor-tracker の data/inago-targets.json を読み、targets の各銘柄について、X で直近14日に投稿された内容を調べてください。
+> 毎週日曜の14時（日本時間）に、GitHub の wasa1-wasa2-wasa3/investor-tracker の data/inago-targets.json を読み、targets の各銘柄について、X で直近14日に投稿された内容を調べてください。
 > 目的は銘柄の評価ではなく、(1) 個人投資家の群衆がどのくらい集まっているか（イナゴ度）と (2) 明らかな危険情報 の2点だけです。
 > 調べ終わったら同じリポジトリに Issue を作ってください。タイトルは「[イナゴ度] YYYY-MM-DD」、本文は次の形の JSON 配列だけを ```json で囲んで書いてください。
 > `[{"secCode":"4桁","name":"銘柄名","recent":直近7日の投稿数のおおよそ,"before":その前の7日の投稿数のおおよそ,"buyReports":直近7日に買った・IN・買い増しと報告した人数のおおよそ,"hype":煽り（爆上げ・テンバガー・まだ間に合う等）が目立つならtrue,"level":"quiet|gathering|swarming","summary":"Xでの話題のされ方を60字以内","dangers":[{"kind":"dividend_cut|yutai_cut|downgrade|dilution|scandal|big_sell|other","text":"何が起きたか50字以内","fact":開示や報道で確認できればtrue・噂ならfalse,"url":"根拠の投稿または記事のURL"}]}]`

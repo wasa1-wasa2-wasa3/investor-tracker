@@ -59,7 +59,7 @@ jobs:
           if [ "$X_SOURCE" != "api" ]; then echo "X投稿はGrok Bot経由のためスキップ"; exit 0; fi
           if [ -z "$XAI_API_KEY" ]; then echo "XAI_API_KEY 未設定のためスキップ"; exit 0; fi
           node scripts/update-x.mjs
-      - name: イナゴ度の調査対象（20選）を書き出す（Grok Botが土曜朝に読む）
+      - name: イナゴ度の調査対象（20選の上位10）を書き出す（Grok Botが日曜14時に読む）
         continue-on-error: true
         env:
           APP_URL: ${{ vars.APP_URL }}

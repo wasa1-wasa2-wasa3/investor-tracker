@@ -3,7 +3,7 @@ import { useState } from "react";
 import { INAGO, INAGO_BY_CODE, LEVELS, DANGER_KINDS, CHECKS } from "../lib/inago";
 import { rangePosition } from "../lib/fit";
 
-// イナゴ度のまとめ。毎週土曜にGrok Botが調べ、Claudeが危険情報を裏取りした結果を表示する（費用ゼロ）
+// イナゴ度のまとめ。毎週日曜にGrok Botが調べ、Claudeが危険情報を裏取りした結果を表示する（費用ゼロ）
 const shortName = (n) => (n || "").replace(/^株式会社|株式会社$/g, "").slice(0, 12);
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" }) : "");
 
@@ -40,7 +40,7 @@ export function XSummary({ list }) {
   const [copied, setCopied] = useState(false);
   const items = INAGO.items || [];
   if (!items.length) {
-    return <div className="inago-empty">🦗 イナゴ度：毎週土曜の朝にGrokが調べて、ここに表示されます</div>;
+    return <div className="inago-empty">🦗 イナゴ度：毎週日曜の14時にGrokが調べて、ここに表示されます</div>;
   }
   const byCode = Object.fromEntries(list.map((p) => [p.secCode, p]));
   const rows = items.map((v) => ({ p: byCode[v.secCode], v }));
