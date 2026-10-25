@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { X_BY_CODE, STANCE } from "../lib/xposts";
+import XVoice from "./XVoice";
 import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
@@ -90,6 +91,7 @@ export default function Picks() {
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
                 {chaseWarning(p.quote) && <span className="chase">{chaseWarning(p.quote)}</span>}
               </div>
+              <XVoice code={p.secCode} name={p.name} />
             </li>
           ))}
         </ol>
