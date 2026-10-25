@@ -1,5 +1,5 @@
 "use client";
-import { pickTop3, reasons, HELD_INDUSTRIES, MIN_YIELD_TOP3 } from "../lib/top3";
+import { pickTop3, reasons, HELD_INDUSTRIES, MIN_YIELD_TOP3, MIN_YIELD_WITH_YUTAI } from "../lib/top3";
 
 const shortName = (n) => (n || "").replace(/^株式会社|株式会社$/g, "");
 
@@ -28,7 +28,7 @@ export default function Top3({ picks }) {
       </ol>
       {note && top.length > 0 && <p className="picks-note">※条件を少しゆるめました：{note}</p>}
       <p className="picks-note">
-        選び方：①大物が買い増し中 ②利回り{MIN_YIELD_TOP3}%以上か優待あり ③52週高値圏は除く ④業種と大物がかぶらない（{HELD_INDUSTRIES.join("・")}は保有済みのため除く）。点数の高い順に当てはめています。
+        選び方：①大物が買い増し中 ②利回り{MIN_YIELD_TOP3}%以上、または優待あり＋利回り{MIN_YIELD_WITH_YUTAI}%以上 ③52週高値圏は除く ④業種と大物がかぶらない（{HELD_INDUSTRIES.join("・")}は保有済みのため除く）。点数の高い順に当てはめています。
         買う前に、直近の決算と適時開示（減配・下方修正）を確認してください。投資判断はご自身で。
       </p>
     </section>
