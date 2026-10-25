@@ -1,7 +1,7 @@
 import { fetchXVoice } from "../../../lib/xvoice";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 300; // Grokの検索は1銘柄で1分を超えることがある（Hobbyの上限は300秒）
 
 // 同じ銘柄は3日間キャッシュして、Grokを呼び直さない（サーバーが再起動すると消える）
 const TTL = 3 * 24 * 60 * 60 * 1000;
@@ -33,6 +33,11 @@ export async function GET(req) {
     cache.set(code, { at, voice });
     return Response.json({ code, at, cached: false, voice }, NO_STORE);
   } catch (e) {
-    return Response.json({ error: `Xの声を取得できませんでした（${e.message}）` }, { status: 502, ...NO_STORE });
+    // xAIの残高切れ・支払い上限。残りの銘柄も同じ結果になるので、画面側で止められるよう印を付ける
+    if (/HTTP 402|spending-limit|credits/.test(e.message)) {
+      usage.n--;
+      return Response.json({ error: "xAIのクレジット（残高）が足りません。console.x.ai で残高と支払い上限を確認してください", stop: true }, { status: 402, ...NO_STORE });
+    }
+    return Response.json({ error: `取得できませんでした（${e.message.slice(0, 120)}）` }, { status: 502, ...NO_STORE });
   }
 }

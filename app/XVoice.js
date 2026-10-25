@@ -20,8 +20,19 @@ export function loadSaved(code) {
 
 async function fetchOne(p) {
   const r = await fetch(`/api/xvoice?code=${p.secCode}&name=${encodeURIComponent(p.name || "")}`);
-  const d = await r.json();
-  if (!r.ok || d.error) throw new Error(d.error || `HTTP ${r.status}`);
+  const text = await r.text();
+  let d;
+  try {
+    d = JSON.parse(text);
+  } catch {
+    // Vercelの時間切れ（504）などはJSONではなく文字のページが返る
+    throw new Error(r.status === 504 ? "時間切れ（Grokの返事が遅すぎました）" : `サーバーエラー（HTTP ${r.status}）`);
+  }
+  if (!r.ok || d.error) {
+    const e = new Error(d.error || `HTTP ${r.status}`);
+    e.stop = d.stop || r.status === 429;
+    throw e;
+  }
   try {
     localStorage.setItem(keyOf(p.secCode), JSON.stringify(d));
   } catch {}
@@ -63,8 +74,11 @@ export function XSummary({ list, voices, setVoices }) {
           const d = await fetchOne(p);
           setVoices((m) => ({ ...m, [p.secCode]: d }));
         } catch (e) {
-          errors.push(`${shortName(p.name)}：${e.message}`);
-          if (/上限/.test(e.message)) {
+          if (e.stop) {
+            // 残高切れ・今日の上限は全銘柄同じなので、1回だけ表示して残りはやめる
+            if (!errors.some((x) => x.startsWith("中止"))) errors.push(`中止：${e.message}`);
+          } else errors.push(`${shortName(p.name)}：${e.message}`);
+          if (e.stop) {
             done += queue.length; // 今日の上限なら残りはやめる
             queue.length = 0;
           }
