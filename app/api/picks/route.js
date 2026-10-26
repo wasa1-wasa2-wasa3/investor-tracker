@@ -39,7 +39,7 @@ export async function GET() {
     const eps = await getCompanyEps(codes).catch(() => ({}));
     for (const p of [...picks, ...yutaiPicks]) {
       const e = eps[p.secCode];
-      p.quote = { ...p.quote, epsGrowthPct: e?.epsGrowthPct ?? null, epsFwd: e?.epsFwd ?? null, epsPrev: e?.epsPrev ?? null, epsPeriod: e?.period ?? null };
+      p.quote = { ...p.quote, epsGrowthPct: e?.epsGrowthPct ?? null, epsFwd: e?.epsFwd ?? null, epsPrev: e?.epsPrev ?? null, opGrowthPct: e?.opGrowthPct ?? null, epsPeriod: e?.period ?? null };
     }
   }
   const body = { days: DAYS, candidates: groups.length, updatedAt: new Date().toISOString(), dataKey: DATA_KEY, error, picks, yutaiPicks };

@@ -98,7 +98,7 @@ export default function Picks() {
 
         {list.length > 0 && (
           <p className="picks-note">
-            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。EPS↑＝会社予想の1株益が前期実績より10%以上増（株探）、新高値ブレイク＝52週高値の97%以上かつEPS↑。
+            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。EPS↑＝会社予想の1株益が前期実績より10%以上増（株探）、反動増かも＝EPSは伸びるが営業利益が伴わない（前期の特別損失の反動など）。新高値ブレイク＝52週高値の97%以上かつEPS↑。
             投資判断はご自身で。
           </p>
         )}
