@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Top3 from "./Top3";
-import { hasYutai, sizeLabel, chaseWarning, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
+import { hasYutai, sizeLabel, chaseWarning, timingBadges, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
 const fmt = (v, d = 1, unit = "") => (v == null ? "—" : `${v.toFixed(d)}${unit}`);
@@ -87,13 +87,18 @@ export default function Picks() {
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
                 {chaseWarning(p.quote) && <span className="chase">{chaseWarning(p.quote)}</span>}
               </div>
+              <div className="pick-timing">
+                {timingBadges(p.quote).map((b) => (
+                  <span key={b.text} className={`timing ${b.cls}`}>{b.text}</span>
+                ))}
+              </div>
             </li>
           ))}
         </ol>
 
         {list.length > 0 && (
           <p className="picks-note">
-            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。
+            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。EPS↑＝予想EPSが実績より10%以上増、新高値ブレイク＝52週高値の97%以上かつEPS↑（Yahoo Finance）。
             投資判断はご自身で。
           </p>
         )}

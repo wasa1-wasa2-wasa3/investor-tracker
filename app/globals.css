@@ -211,3 +211,9 @@ a { color: var(--chg); }
 .my-calc input { font: inherit; font-size: 16px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 9em; }
 .my-calc button { cursor: pointer; }
 .my-calc-out { flex-basis: 100%; margin: 4px 0 0; font-size: 13px; line-height: 1.7; }
+
+.pick-timing { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.timing { font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+.timing.good { color: #2e7d4f; border-color: #2e7d4f; }
+.timing.bad { color: var(--new); border-color: var(--new); }
+@media (prefers-color-scheme: dark) { .timing.good { color: #6fcf97; border-color: #6fcf97; } }
