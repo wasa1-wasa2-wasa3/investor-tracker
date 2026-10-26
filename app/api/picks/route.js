@@ -1,5 +1,6 @@
 import { getLargeHoldingFilings } from "../../../lib/edinet";
 import { getQuotes } from "../../../lib/quotes";
+import { getCompanyEps } from "../../../lib/eps";
 import { groupBySecurity, rankPicks, rankYutaiPicks, isCandidate } from "../../../lib/picks";
 import { getHoldings } from "../../../lib/holdings";
 import { ownReason, stockReasons } from "../../../lib/fit";
@@ -32,6 +33,15 @@ export async function GET() {
   }
   const picks = rankPicks(groups, quotes);
   const yutaiPicks = rankYutaiPicks(groups, quotes); // 「優待ありのみ」用：20件で切らず全件
+  // 表示する銘柄だけ、会社予想のEPS成長率を株探から取って上書きする
+  if (process.env.QUOTES_MOCK !== "1") {
+    const codes = [...new Set([...picks, ...yutaiPicks].map((p) => p.secCode))];
+    const eps = await getCompanyEps(codes).catch(() => ({}));
+    for (const p of [...picks, ...yutaiPicks]) {
+      const e = eps[p.secCode];
+      p.quote = { ...p.quote, epsGrowthPct: e?.epsGrowthPct ?? null, epsFwd: e?.epsFwd ?? null, epsPrev: e?.epsPrev ?? null, epsPeriod: e?.period ?? null };
+    }
+  }
   const body = { days: DAYS, candidates: groups.length, updatedAt: new Date().toISOString(), dataKey: DATA_KEY, error, picks, yutaiPicks };
   if (!error && picks.length) cache = { at: Date.now(), key: DATA_KEY, body };
   return Response.json(body, NO_STORE);
