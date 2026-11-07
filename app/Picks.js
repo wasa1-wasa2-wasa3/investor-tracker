@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Top3 from "./Top3";
-import { hasYutai, sizeLabel, chaseWarning, timingBadges, MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
+import { hasYutai, sizeLabel, chaseWarning, timingBadges, MIN_MARKET_CAP_OKU, SUB_MIN_MARKET_CAP_OKU, MIN_TURNOVER_OKU } from "../lib/fit";
 
 const fmtOku = (v) => (v == null ? "—" : v >= 10000 ? `${(v / 10000).toFixed(1)}兆` : `${v.toLocaleString()}億`);
 const fmt = (v, d = 1, unit = "") => (v == null ? "—" : `${v.toFixed(d)}${unit}`);
@@ -30,7 +30,7 @@ export default function Picks() {
       <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary>
           <span className="picks-title">{yutaiOnly ? `優待あり銘柄（${list.length}件）` : "有望銘柄20選"}</span>
-          <span className="picks-sub">大物購入 × 中大型 × 配当・優待（半年以内）{!open && "　▼タップで開く"}</span>
+          <span className="picks-sub">大物購入 × 中大型（＋小型サブ枠） × 配当・優待（半年以内）{!open && "　▼タップで開く"}</span>
         </summary>
 
         <button
@@ -81,7 +81,7 @@ export default function Picks() {
                 <span>PBR <b>{fmt(p.quote.pbr, 2)}</b></span>
                 <span>
                   時価総額 <b>{fmtOku(p.quote.marketCapOku)}</b>
-                  {sizeLabel(p.quote.marketCapOku) && <span className="size-tag">{sizeLabel(p.quote.marketCapOku)}</span>}
+                  {sizeLabel(p.quote.marketCapOku) && <span className={`size-tag${p.subFrame ? " sub" : ""}`}>{sizeLabel(p.quote.marketCapOku)}</span>}
                   {p.industry && <span className="size-tag">{p.industry}</span>}
                 </span>
                 <span>売買代金 <b>{p.quote.turnoverOku == null ? "—" : `${fmt(p.quote.turnoverOku, 1)}億/日`}</b></span>
@@ -98,7 +98,7 @@ export default function Picks() {
 
         {list.length > 0 && (
           <p className="picks-note">
-            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。EPS↑＝会社予想の1株益が前期実績より10%以上増（株探）、反動増かも＝EPSは伸びるが営業利益が伴わない（前期の特別損失の反動など）。新高値ブレイク＝52週高値の97%以上かつEPS↑。
+            点数＝大物40（続けて買い増しで加点）＋長期保有30（配当＋優待）＋爆発力30（PBRの低さ＋52週高値からの距離）。時価総額{SUB_MIN_MARKET_CAP_OKU.toLocaleString()}億未満・売買代金1日{MIN_TURNOVER_OKU}億未満は対象外。時価総額{MIN_MARKET_CAP_OKU.toLocaleString()}億未満は「小型（サブ枠）」と表示（採点は主枠と同じ）。候補 {data.candidates} 銘柄から。優待は有価証券報告書の「株主に対する特典」欄より。EPS↑＝会社予想の1株益が前期実績より10%以上増（株探）、反動増かも＝EPSは伸びるが営業利益が伴わない（前期の特別損失の反動など）。新高値ブレイク＝52週高値の97%以上かつEPS↑。
             投資判断はご自身で。
           </p>
         )}

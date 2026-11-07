@@ -219,7 +219,7 @@ export default function Home() {
 
       {offGroups.length > 0 && (
         <details className="fixes">
-          <summary>目的外 {offGroups.length}件<span className="fixes-note">（低配当で優待なし・小型株・流動性不足・TOB・親会社級の大株主・持ち合いなど）</span></summary>
+          <summary>目的外 {offGroups.length}件<span className="fixes-note">（低配当で優待なし・時価総額300億未満・流動性不足・TOB・親会社級の大株主・持ち合いなど）</span></summary>
           <div className="fix-list">
             {offGroups.map(({ g, reason }) => (
               <div key={g[0].docId} className="fix-row">
